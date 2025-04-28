@@ -1,17 +1,55 @@
-<<<<<<< HEAD
-# React + Vite
+# 🍽️ Foodcription
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Foodcription** je web aplikacija za **pretplatu na zdrave obroke**!  
+Korisnici mogu pregledavati gotove jelovnike i pretplatiti se na svakodnevne isporuke nutritivno bogatih, ukusnih jela, spremnih za užurbani način života.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tech Stack
 
-## Expanding the ESLint configuration
+- **Frontend**:
+  - ⚛️ React (Vite setup)
+  - 🎨 TailwindCSS za brzo i responzivno stiliziranje
+- **Backend** (uskoro):
+  - ☕ Spring Boot (Java 21)
+- **Baza podataka**:
+  - 🛢️ MariaDB
+- **Autentikacija**:
+  - ✉️ Vlastiti login sustav (Spring Security) + mogućnost Google prijave
+- **Deployment**:
+  - GitHub (za verzioniranje)
+  - (Kasnije Docker za backend? 🚀)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# Foodcription
-Foodcription web site
->>>>>>> fbaf8d51fa4b56306c5faf88925df85daef42ca7
+---
+
+## 📋 Trenutno implementirano
+
+- ✅ Dizajniran landing page s hero sekcijom, karticama i promotivnim bannerom
+- ✅ Responzivan dizajn prilagođen mobilnim uređajima
+- ✅ Pripremljena struktura za login / signup funkcionalnosti
+
+---
+
+## 🔥 Što dolazi uskoro
+
+- 🔐 Puna korisnička autentikacija (email + Google OAuth login)
+- 📦 Backend API za upravljanje korisnicima, narudžbama i pretplatama
+- 📈 Admin dashboard za upravljanje jelima i cijenama
+- 🛠️ Automatizacija deploya na server
+
+---
+
+## 📸 Screenshot
+
+![Foodcription Landing Page](./src/assets/HeroImage.jpg)
+
+---
+
+## 📫 Kontakt
+
+Ako imaš pitanja ili želiš surađivati:  
+📧 nikola.jp.dev@gmail.com
+
+---
+
+> "Bringing healthy, ready-to-eat meals to your doorstep – with just one click."
