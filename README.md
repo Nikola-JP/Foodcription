@@ -41,7 +41,7 @@ Korisnici mogu pregledavati gotove jelovnike i pretplatiti se na svakodnevne isp
 
 ## 📸 Screenshot
 
-![Foodcription Landing Page](./src/assets/Landingpage.png)
+![Foodcription Landing Page](frontend\src\assets\Landingpage.png)
 
 ---
 
