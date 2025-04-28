@@ -45,11 +45,4 @@ Korisnici mogu pregledavati gotove jelovnike i pretplatiti se na svakodnevne isp
 
 ---
 
-## 📫 Kontakt
-
-Ako imaš pitanja ili želiš surađivati:  
-📧 nikola.jp.dev@gmail.com
-
----
-
 > "Bringing healthy, ready-to-eat meals to your doorstep – with just one click."
