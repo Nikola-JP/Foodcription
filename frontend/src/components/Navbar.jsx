@@ -1,6 +1,6 @@
 import logo from '../assets/logo.png';
 
-function Navbar() {
+function Navbar({ onSignIn, onRegister }) {
   return (
     <nav className="flex justify-between items-center p-4 bg-white shadow-md">
       <img src={logo} alt="Foodcription Logo" className="h-16 w-auto" />
@@ -10,12 +10,12 @@ function Navbar() {
         <li className="hover:text-green-500 cursor-pointer">Cijene</li>
         <li className="hover:text-green-500 cursor-pointer">Kontakt</li>
         <li>
-          <button className="px-4 py-2 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition">
+          <button onClick={onSignIn} className="px-4 py-2 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition">
             Sign in
           </button>
         </li>
         <li>
-          <button className="px-4 py-2 rounded-full bg-green-500 text-white hover:bg-green-600 transition">
+          <button onClick={onRegister} className="px-4 py-2 rounded-full bg-green-500 text-white hover:bg-green-600 transition">
             Register
           </button>
         </li>
