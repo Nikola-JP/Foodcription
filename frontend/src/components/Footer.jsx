@@ -9,7 +9,7 @@ function Footer() {
         </div>
         <div className="text-sm mt-4 md:mt-0">
           &copy; {new Date().getFullYear()} Coded by{" "}
-          <span className="font-semibold">chase & darkimundus</span>
+          <span className="font-semibold">chase & darkimunus</span>
         </div>
       </div>
     </footer>
