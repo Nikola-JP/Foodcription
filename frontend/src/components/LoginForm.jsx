@@ -1,20 +1,31 @@
 import React, { useState } from 'react';
+import { GoogleLogin } from '@react-oauth/google';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = e => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    // Handle login logic here
+    // Handle klasičan email/password login
     console.log('Logging in:', { email, password });
   };
 
+  const handleGoogleSuccess = (credentialResponse) => {
+    console.log("Google login success:", credentialResponse);
+    // Tu kasnije šalješ credentialResponse.credential backendu
+  };
+
+  const handleGoogleError = () => {
+    console.log("Google login failed");
+  };
+
   return (
-    <form onSubmit={handleLogin}>
-      <h2 className="text-xl font-bold mb-4">Login</h2>
+    <form onSubmit={handleLogin} className="flex flex-col space-y-4">
+      <h2 className="text-xl font-bold mb-4 text-center">Login</h2>
+      
       <input
-        className="border p-2 w-full mb-2"
+        className="border p-2 w-full"
         type="email"
         placeholder="Email"
         value={email}
@@ -22,17 +33,33 @@ const LoginForm = () => {
         required
       />
       <input
-        className="border p-2 w-full mb-4"
+        className="border p-2 w-full"
         type="password"
         placeholder="Password"
         value={password}
         onChange={e => setPassword(e.target.value)}
         required
       />
-      <button className="bg-green-600 text-white px-4 py-2 w-full rounded hover:bg-green-700 transition">
+      <button 
+        type="submit"
+        className="bg-green-600 text-white px-4 py-2 w-full rounded hover:bg-green-700 transition"
+      >
         Login
       </button>
-      <div className="text-sm text-center mt-4">
+
+      {/* Divider */}
+      <div className="text-center text-gray-500">ili</div>
+
+      {/* Google login gumb */}
+      <div className="flex justify-center">
+        <GoogleLogin
+          onSuccess={handleGoogleSuccess}
+          onError={handleGoogleError}
+        />
+      </div>
+
+      {/* Forgot password link */}
+      <div className="text-sm text-center mt-2">
         <a href="#" className="text-green-600 hover:underline">
           Zaboravili ste lozinku?
         </a>

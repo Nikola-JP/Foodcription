@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
 function Navbar({ onSignIn, onRegister }) {
@@ -7,7 +8,11 @@ function Navbar({ onSignIn, onRegister }) {
       <ul className="flex space-x-6 text-gray-700 font-medium">
         <li className="hover:text-green-500 cursor-pointer">Plans</li>
         <li className="hover:text-green-500 cursor-pointer">On Menu</li>
-        <li className="hover:text-green-500 cursor-pointer">Cijene</li>
+        <li>
+          <Link to="/pretplata" className="hover:text-green-500 cursor-pointer">
+            Cijene
+          </Link>
+        </li>
         <li className="hover:text-green-500 cursor-pointer">Kontakt</li>
         <li>
           <button onClick={onSignIn} className="px-4 py-2 rounded-full border border-green-500 text-green-500 hover:bg-green-500 hover:text-white transition">
