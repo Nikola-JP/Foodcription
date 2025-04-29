@@ -18,7 +18,6 @@ Korisnici mogu pregledavati gotove jelovnike i pretplatiti se na svakodnevne isp
   - ✉️ Vlastiti login sustav (Spring Security) + mogućnost Google prijave
 - **Deployment**:
   - GitHub (za verzioniranje)
-  - (Kasnije Docker za backend? 🚀)
 
 ---
 
@@ -41,7 +40,7 @@ Korisnici mogu pregledavati gotove jelovnike i pretplatiti se na svakodnevne isp
 
 ## 📸 Screenshot
 
-![Foodcription Landing Page](frontend\src\assets\Landingpage.png)
+![Foodcription Landing Page](frontend/src/assets/Landingpage.png)
 
 ---
 
