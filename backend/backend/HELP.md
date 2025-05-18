@@ -1,9 +1,10 @@
-# Read Me First
-The following was discovered as part of building this project:
-
-* The original package name '.backend' is invalid and this project uses 'backend' instead.
-
 # Getting Started
+
+# Za testiranje backend-a potrebno je:
+1. Postaviti se u backend/backend direktorij naredbom : cd backend/backend
+2. Poslati naredbu za svaki slučaj ako ne postoji dozvola za gradle : chmod +x ./gradlew
+3. Poslati naredbu za pokretanje backend-a aplikacije na portu 8080 : ./gradlew bootRun
+4. Otvoriti backend na localhost:8080.
 
 ### Reference Documentation
 For further reference, please consider the following sections:
