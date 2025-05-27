@@ -5,15 +5,31 @@ const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Handle klasičan email/password login
-    console.log('Logging in:', { email, password });
+    
+    try {
+      const res = await fetch("https://orange-rotary-phone-xjvxr6x6vxxf4p9-8080.app.github.dev/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      if (!res.ok) throw new Error("Login failed");
+
+      const user = await res.json();
+      alert(`Dobrodošli natrag, ${user.imeKorisnika}!`);
+    } catch (error) {
+      alert("Pogrešan email ili lozinka.");
+      console.error("Login error:", error);
+    }
   };
 
   const handleGoogleSuccess = (credentialResponse) => {
     console.log("Google login success:", credentialResponse);
-    // Tu kasnije šalješ credentialResponse.credential backendu
+    // TODO: send credentialResponse.credential to backend
   };
 
   const handleGoogleError = () => {
@@ -23,7 +39,7 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleLogin} className="flex flex-col space-y-4">
       <h2 className="text-xl font-bold mb-4 text-center">Login</h2>
-      
+
       <input
         className="border p-2 w-full"
         type="email"
@@ -40,17 +56,15 @@ const LoginForm = () => {
         onChange={e => setPassword(e.target.value)}
         required
       />
-      <button 
+      <button
         type="submit"
         className="bg-green-600 text-white px-4 py-2 w-full rounded hover:bg-green-700 transition"
       >
         Login
       </button>
 
-      {/* Divider */}
       <div className="text-center text-gray-500">ili</div>
 
-      {/* Google login gumb */}
       <div className="flex justify-center">
         <GoogleLogin
           onSuccess={handleGoogleSuccess}
@@ -58,7 +72,6 @@ const LoginForm = () => {
         />
       </div>
 
-      {/* Forgot password link */}
       <div className="text-sm text-center mt-2">
         <a href="#" className="text-green-600 hover:underline">
           Zaboravili ste lozinku?
@@ -69,3 +82,4 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+                                                                                                                                                                                            

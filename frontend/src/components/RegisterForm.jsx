@@ -1,13 +1,37 @@
 import React, { useState } from 'react';
 
 const RegisterForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, setForm] = useState({
+    imeKorisnika: '',
+    prezimeKorisnika: '',
+    emailKorisnika: '',
+    lozinkaKorisnika: ''
+    
+  });
 
-  const handleRegister = e => {
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Handle registration logic here
-    console.log('Registering:', { email, password });
+
+    try {
+      const res = await fetch("https://orange-rotary-phone-xjvxr6x6vxxf4p9-8080.app.github.dev/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
+
+      if (!res.ok) throw new Error("Register failed");
+
+      alert("Uspješna registracija! Možete se prijaviti.");
+    } catch (error) {
+      alert("Greška prilikom registracije.");
+      console.error("Registration error:", error);
+    }
   };
 
   return (
@@ -15,18 +39,32 @@ const RegisterForm = () => {
       <h2 className="text-xl font-bold mb-4">Register</h2>
       <input
         className="border p-2 w-full mb-2"
+        name="imeKorisnika"
+        placeholder="Ime"
+        onChange={handleChange}
+        required
+      />
+      <input
+        className="border p-2 w-full mb-2"
+        name="prezimeKorisnika"
+        placeholder="Prezime"
+        onChange={handleChange}
+        required
+      />
+      <input
+        className="border p-2 w-full mb-2"
+        name="emailKorisnika"
         type="email"
         placeholder="Email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
+        onChange={handleChange}
         required
       />
       <input
         className="border p-2 w-full mb-4"
+        name="lozinkaKorisnika"
         type="password"
-        placeholder="Password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
+        placeholder="Lozinka"
+        onChange={handleChange}
         required
       />
       <button className="bg-green-600 text-white px-4 py-2 w-full rounded">Register</button>
