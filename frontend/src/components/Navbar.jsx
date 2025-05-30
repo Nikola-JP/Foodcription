@@ -6,11 +6,14 @@ function Navbar({ onSignIn, onRegister }) {
     <nav className="flex justify-between items-center p-4 bg-white shadow-md">
       <img src={logo} alt="Foodcription Logo" className="h-16 w-auto" />
       <ul className="flex space-x-6 text-gray-700 font-medium">
-        <li className="hover:text-green-500 cursor-pointer">Plans</li>
-        <li className="hover:text-green-500 cursor-pointer">On Menu</li>
+        <li>
+          <Link to="/menu" className="hover:text-green-500 cursor-pointer">
+          On Menu           
+          </Link>
+        </li>
         <li>
           <Link to="/pretplata" className="hover:text-green-500 cursor-pointer">
-            Cijene
+            Pretplata
           </Link>
         </li>
         <li className="hover:text-green-500 cursor-pointer">Kontakt</li>
