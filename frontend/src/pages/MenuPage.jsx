@@ -4,24 +4,46 @@ import Footer from '../components/Footer';
 
 const MenuPage = () => {
   const [meals, setMeals] = useState([]);
+  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // 👉 TODO: Zamijeniti s fetch kad backend bude spojen
-    setMeals([
-      { id: 1, naziv: 'Štrukli sa sirom', image: '/images/shtrukli.jpg' },
-      { id: 2, naziv: 'Goulash', image: '/images/goulash.jpg' },
-      { id: 3, naziv: 'Voćna salata', image: '/images/fruit.jpg' },
-      { id: 4, naziv: 'Miso Ramen', image: '/images/misosoup.jpg' },
-      { id: 5, naziv: 'Pita od povrća', image: '/images/foodbowl.jpg' },
-      { id: 6, naziv: 'Pesto pasta', image: '/images/pesto.jpg' },
-      { id: 7, naziv: 'Pileća salata', image: '/images/piletinasalata.jpg' }
-    ]);
+    fetch('http://localhost:8080/api/meals/count')
+      .then(res => {
+        if (!res.ok) throw new Error('Greška pri dohvatu broja jela');
+          return res.json();
+        })
+      .then(data => {
+        setCount(data.count); // Ovdje pristupamo svojstvu 'count' objekta
+        return fetch('http://localhost:8080/api/meals');
+        })
+      .then(res => {
+        if (!res.ok) throw new Error('Greška pri dohvatu jela');
+        return res.json();
+      })
+      .then(data => {
+        const formattedMeals = data.map(item => ({
+          id: item.id,
+          naziv: item.naziv,
+          image: `/images/${encodeURIComponent(item.naziv)}.jpg`
+        }));
+        setMeals(formattedMeals);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
   }, []);
+
+  if (loading) return <div>Učitavanje...</div>;
+  if (error) return <div>Greška: {error}</div>;
 
   return (
     <div className="bg-white min-h-screen">
       <main className="max-w-6xl mx-auto py-12 px-4">
-        <h1 className="text-3xl font-bold mb-8 text-gray-800">Pregled ovo mjesečnog menija</h1>
+        <h1 className="text-3xl font-bold mb-8 text-gray-800">Pregled ovog mjesečnog menija</h1>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
           {meals.map(meal => (

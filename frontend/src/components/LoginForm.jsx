@@ -9,7 +9,7 @@ const LoginForm = () => {
     e.preventDefault();
     
     try {
-      const res = await fetch("https://orange-rotary-phone-xjvxr6x6vxxf4p9-8080.app.github.dev/api/auth/login", {
+      const res = await fetch("http://localhost:8080/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

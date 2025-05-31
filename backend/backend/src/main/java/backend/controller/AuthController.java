@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:3000") // Allow frontend access
+@CrossOrigin(origins = "http://localhost:5173") // Allow frontend access
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -35,9 +35,15 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Korisnik korisnik) {
-        if (korisnik.getRole() == null) {
-            korisnik.setRole(Korisnik.Role.user);
-        }
+        try {
+            if (korisnik.getRole() == null) {
+                korisnik.setRole(Korisnik.Role.user);
+            }
         return ResponseEntity.ok(korisnikService.register(korisnik));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Greška na serveru: " + e.getMessage());
+        }
     }
 }

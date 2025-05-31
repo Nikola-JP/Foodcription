@@ -1,9 +1,9 @@
-package backend.config; // use the actual package path
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+package backend.config;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class WebConfig {
@@ -11,9 +11,9 @@ public class WebConfig {
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
+            public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://orange-rotary-phone-xjvxr6x6vxxf4p9-5173.app.github.dev")
+                        .allowedOrigins("http://localhost:5173")  // Removed trailing slash
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
@@ -21,3 +21,4 @@ public class WebConfig {
         };
     }
 }
+

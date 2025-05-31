@@ -3,19 +3,28 @@ package backend.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "FC_Korisnik")
+@Table(name = "fc_korisnik")
 public class Korisnik {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_korisnika")
     private Long idKorisnika;
 
+    @Column(name = "ime_korisnika")
     private String imeKorisnika;
+
+    @Column(name = "prezime_korisnika")
     private String prezimeKorisnika;
+
+    @Column(name = "email_korisnika", unique = true)
     private String emailKorisnika;
+
+    @Column(name = "lozinka_korisnika")
     private String lozinkaKorisnika;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Role role;
 
     public enum Role {

@@ -15,11 +15,17 @@ public class KorisnikService {
     }
 
     public Optional<Korisnik> authenticate(String email, String password) {
-        return korisnikRepository.findByEmailKorisnika(email)
+        String normalizedEmail = email.toLowerCase();
+        return korisnikRepository.findByEmailKorisnika(normalizedEmail)
                 .filter(user -> user.getLozinkaKorisnika().equals(password));
     }
 
     public Korisnik register(Korisnik korisnik) {
+        korisnik.setEmailKorisnika(korisnik.getEmailKorisnika().toLowerCase());
+
+        if (korisnikRepository.findByEmailKorisnika(korisnik.getEmailKorisnika()).isPresent()) {
+            throw new IllegalArgumentException("Email se već koristi.");
+        }
         return korisnikRepository.save(korisnik);
     }
 }

@@ -17,7 +17,7 @@ const RegisterForm = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("https://orange-rotary-phone-xjvxr6x6vxxf4p9-8080.app.github.dev/api/auth/register", {
+      const res = await fetch("http://localhost:8080/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -25,11 +25,14 @@ const RegisterForm = () => {
         body: JSON.stringify(form)
       });
 
-      if (!res.ok) throw new Error("Register failed");
+      if (!res.ok) {
+        const message = await res.text(); // Get message from backend
+        throw new Error(message);
+      }
 
       alert("Uspješna registracija! Možete se prijaviti.");
     } catch (error) {
-      alert("Greška prilikom registracije.");
+      alert(error.message || "Greška prilikom registracije.");
       console.error("Registration error:", error);
     }
   };
