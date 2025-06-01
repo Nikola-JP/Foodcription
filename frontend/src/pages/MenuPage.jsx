@@ -26,7 +26,7 @@ const MenuPage = () => {
         const formattedMeals = data.map(item => ({
           id: item.id,
           naziv: item.naziv,
-          image: `/images/${encodeURIComponent(item.naziv)}.jpg`
+          image: `/images/${encodeURIComponent(item.naziv.toLowerCase())}.jpg`
         }));
         setMeals(formattedMeals);
         setLoading(false);

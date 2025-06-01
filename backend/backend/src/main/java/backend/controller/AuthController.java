@@ -39,11 +39,13 @@ public class AuthController {
             if (korisnik.getRole() == null) {
                 korisnik.setRole(Korisnik.Role.user);
             }
-        return ResponseEntity.ok(korisnikService.register(korisnik));
+            return ResponseEntity.ok(korisnikService.register(korisnik));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();  // <--- add this to see full error in server logs
             return ResponseEntity.status(500).body("Greška na serveru: " + e.getMessage());
         }
     }
+
 }
