@@ -9,33 +9,52 @@ const MenuPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/meals/count')
-      .then(res => {
-        if (!res.ok) throw new Error('Greška pri dohvatu broja jela');
-          return res.json();
-        })
-      .then(data => {
-        setCount(data.count); // Ovdje pristupamo svojstvu 'count' objekta
-        return fetch('http://localhost:8080/api/meals');
-        })
-      .then(res => {
-        if (!res.ok) throw new Error('Greška pri dohvatu jela');
-        return res.json();
-      })
-      .then(data => {
-        const formattedMeals = data.map(item => ({
-          id: item.id,
-          naziv: item.naziv,
-          image: `/images/${encodeURIComponent(item.naziv.toLowerCase())}.jpg`
-        }));
-        setMeals(formattedMeals);
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message);
-        setLoading(false);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user?.token;
+
+  if (!token) {
+    setError("User not authenticated.");
+    setLoading(false);
+    return;
+  }
+
+  fetch("http://localhost:8080/api/meals/count", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    }
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Greška pri dohvatu broja jela");
+      return res.json();
+    })
+    .then(data => {
+      setCount(data.count);
+      return fetch("http://localhost:8080/api/meals", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
       });
-  }, []);
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Greška pri dohvatu jela");
+      return res.json();
+    })
+    .then(data => {
+      const formattedMeals = data.map(item => ({
+        id: item.id,
+        naziv: item.naziv,
+        image: `/images/${encodeURIComponent(item.naziv)}.jpg`
+      }));
+      setMeals(formattedMeals);
+      setLoading(false);
+    })
+    .catch(err => {
+      setError(err.message);
+      setLoading(false);
+    });
+}, []);
 
   if (loading) return <div>Učitavanje...</div>;
   if (error) return <div>Greška: {error}</div>;
@@ -43,7 +62,9 @@ const MenuPage = () => {
   return (
     <div className="bg-white min-h-screen">
       <main className="max-w-6xl mx-auto py-12 px-4">
-        <h1 className="text-3xl font-bold mb-8 text-gray-800">Pregled ovog mjesečnog menija</h1>
+        <h1 className="text-3xl font-bold mb-8 text-gray-800">
+          Pregled ovog mjesečnog menija
+        </h1>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
           {meals.map(meal => (

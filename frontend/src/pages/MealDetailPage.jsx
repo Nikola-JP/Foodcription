@@ -29,33 +29,47 @@ const MealDetailPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/meals/${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Jelo nije pronađeno');
-        console.error('Fetch status:', res.status);
-        return res.json();
-      })
-      .then(data => {
-        const nutrijenti = parseNutritivneVrijednosti(data.nutritivneVrijednosti);
-        setMeal({
-          id: data.id,
-          naziv: data.naziv,
-          opis: data.opis,
-          slika: `/images/${encodeURIComponent(data.naziv)}.jpg`,
-          nutrijenti,
-          recenzije: [ // možeš ih kasnije iz baze ili hardkodirati
-            { autor: 'Maja', grad: 'Zagreb', tekst: 'Odlična salata!' },
-            { autor: 'Ivan', grad: 'Rijeka', tekst: 'Medaljoni top, svježa rajčica, super dressing.' },
-            { autor: 'Lucija', grad: 'Split', tekst: 'Nešto fino bez grižnje savjesti.' }
-          ]
-        });
-        setLoading(false);
-      })
-      .catch(err => {
-        setError(err.message);
-        setLoading(false);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const token = user?.token;
+
+  if (!token) {
+    setError("User not authenticated.");
+    setLoading(false);
+    return;
+  }
+
+  fetch(`http://localhost:8080/api/meals/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then(res => {
+      if (!res.ok) throw new Error('Jelo nije pronađeno');
+      console.error('Fetch status:', res.status);
+      return res.json();
+    })
+    .then(data => {
+      const nutrijenti = parseNutritivneVrijednosti(data.nutritivneVrijednosti);
+      setMeal({
+        id: data.id,
+        naziv: data.naziv,
+        opis: data.opis,
+        slika: `/images/${encodeURIComponent(data.naziv)}.jpg`,
+        nutrijenti,
+        recenzije: [
+          { autor: 'Maja', grad: 'Zagreb', tekst: 'Odlična salata!' },
+          { autor: 'Ivan', grad: 'Rijeka', tekst: 'Medaljoni top, svježa rajčica, super dressing.' },
+          { autor: 'Lucija', grad: 'Split', tekst: 'Nešto fino bez grižnje savjesti.' }
+        ]
       });
-  }, [id]);
+      setLoading(false);
+    })
+    .catch(err => {
+      setError(err.message);
+      setLoading(false);
+    });
+}, [id]);
 
   if (loading) return <p className="text-center mt-10">Učitavanje podataka o jelu...</p>;
   if (error) return <p className="text-center mt-10 text-red-600">Greška: {error}</p>;

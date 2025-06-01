@@ -1,30 +1,45 @@
 import React, { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
+import { useNavigate } from "react-router-dom";
 
-const LoginForm = () => {
+const LoginForm = ({ onClose }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    
-    try {
-      const res = await fetch("http://localhost:8080/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, password })
-      });
+  e.preventDefault();
 
-      if (!res.ok) throw new Error("Login failed");
+  try {
+    const res = await fetch("http://localhost:8080/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    });
 
-      const user = await res.json();
-      alert(`Dobrodošli natrag, ${user.imeKorisnika}!`);
-    } catch (error) {
-      alert("Pogrešan email ili lozinka.");
-      console.error("Login error:", error);
-    }
+    if (!res.ok) throw new Error("Login failed");
+
+    const data = await res.json();
+    const user = data.user;  // extract user object
+    const token = data.token; // extract token
+    alert(`Dobrodošli natrag, ${user.imeKorisnika}!`);
+    localStorage.setItem("user", JSON.stringify({
+      ...user,          // user info
+      token: token// add token from backend
+    }));
+    onClose();
+
+    // Check if redirect path is stored, otherwise fallback to dashboard
+    const redirectPath = sessionStorage.getItem("redirectAfterLogin") || "/dashboard";
+    sessionStorage.removeItem("redirectAfterLogin");
+
+    navigate(redirectPath); // Redirect to intended page or dashboard
+  } catch (error) {
+    alert("Pogrešan email ili lozinka.");
+    console.error("Login error:", error);
+  }
   };
 
   const handleGoogleSuccess = (credentialResponse) => {

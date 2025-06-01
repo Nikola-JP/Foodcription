@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
-const RegisterForm = () => {
+const RegisterForm = ({ onClose }) => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     imeKorisnika: '',
     prezimeKorisnika: '',
@@ -31,6 +33,9 @@ const RegisterForm = () => {
       }
 
       alert("Uspješna registracija! Možete se prijaviti.");
+      localStorage.setItem("user", JSON.stringify(user));
+      onClose();
+      navigate("/dashboard"); // Redirect after login
     } catch (error) {
       alert(error.message || "Greška prilikom registracije.");
       console.error("Registration error:", error);

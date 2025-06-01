@@ -24,7 +24,7 @@ const AuthModal = ({ isOpen, onClose, mode }) => {
         >
           ×
         </button>
-        {mode === "login" ? <LoginForm /> : <RegisterForm />}
+        {mode === "login" ? <LoginForm onClose={onClose} /> : <RegisterForm onClose={onClose} />}
       </div>
     </div>
   );
