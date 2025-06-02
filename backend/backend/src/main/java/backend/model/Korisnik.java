@@ -1,6 +1,13 @@
 package backend.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "fc_korisnik")
@@ -34,10 +41,9 @@ public class Korisnik {
         user, admin
     }
 
-    // Getters and Setters
 
     public Long getIdKorisnika() {
-        return idKorisnika;
+        return this.idKorisnika;
     }
 
     public void setIdKorisnika(Long idKorisnika) {
@@ -45,7 +51,7 @@ public class Korisnik {
     }
 
     public String getImeKorisnika() {
-        return imeKorisnika;
+        return this.imeKorisnika;
     }
 
     public void setImeKorisnika(String imeKorisnika) {
@@ -53,7 +59,7 @@ public class Korisnik {
     }
 
     public String getPrezimeKorisnika() {
-        return prezimeKorisnika;
+        return this.prezimeKorisnika;
     }
 
     public void setPrezimeKorisnika(String prezimeKorisnika) {
@@ -61,7 +67,7 @@ public class Korisnik {
     }
 
     public String getEmailKorisnika() {
-        return emailKorisnika;
+        return this.emailKorisnika;
     }
 
     public void setEmailKorisnika(String emailKorisnika) {
@@ -69,7 +75,7 @@ public class Korisnik {
     }
 
     public String getLozinkaKorisnika() {
-        return lozinkaKorisnika;
+        return this.lozinkaKorisnika;
     }
 
     public void setLozinkaKorisnika(String lozinkaKorisnika) {
@@ -77,7 +83,7 @@ public class Korisnik {
     }
 
     public Role getRole() {
-        return role;
+        return this.role;
     }
 
     public void setRole(Role role) {
@@ -85,10 +91,11 @@ public class Korisnik {
     }
 
     public String getPhone() {
-        return phone;
+        return this.phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
     }
+    
 }

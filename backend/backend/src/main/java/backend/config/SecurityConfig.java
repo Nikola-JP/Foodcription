@@ -41,13 +41,13 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")  // ✅ Moved here
                 .anyRequest().authenticated()
             )
             .cors(Customizer.withDefaults())
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-            // Removed httpBasic()
 
-        return http.build();
+        return http.build();   
     }
 
     @Bean
