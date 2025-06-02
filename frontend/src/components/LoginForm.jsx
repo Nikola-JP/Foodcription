@@ -32,7 +32,7 @@ const LoginForm = ({ onClose }) => {
     onClose();
 
     // Check if redirect path is stored, otherwise fallback to dashboard
-    const redirectPath = sessionStorage.getItem("redirectAfterLogin") || "/dashboard";
+    const redirectPath = sessionStorage.getItem("redirectAfterLogin") || "/moj-dashboard";
     sessionStorage.removeItem("redirectAfterLogin");
 
     navigate(redirectPath); // Redirect to intended page or dashboard

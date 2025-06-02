@@ -45,7 +45,7 @@ const RegisterForm = ({ onClose }) => {
 
       onClose();
 
-      const redirectPath = sessionStorage.getItem("redirectAfterLogin") || "/dashboard";
+      const redirectPath = sessionStorage.getItem("redirectAfterLogin") || "/moj-dashboard";
       sessionStorage.removeItem("redirectAfterLogin");
 
       navigate(redirectPath);

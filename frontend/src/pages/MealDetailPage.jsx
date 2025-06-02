@@ -65,7 +65,7 @@ const MealDetailPage = () => {
           id: data.id,
           naziv: data.naziv,
           opis: data.opis,
-          slika: `/images/${encodeURIComponent(data.naziv)}.jpg`,
+          slika: data.imgPath,
           kategorija: data.kategorija,
           nutrijenti,
           recenzije: [

@@ -23,6 +23,9 @@ public class Jelo {
     @Column(name = "cijena_jela")
     private Double cijena;
 
+    @Column(name = "img_path")
+    private String imgPath;
+
     // Getteri i setteri
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -38,4 +41,7 @@ public class Jelo {
 
     public Double getCijena() { return cijena; }
     public void setCijena(Double cijena) { this.cijena = cijena; }
+
+    public String getimgPath() { return imgPath; }
+    public void setimgPath(String imgPath) { this.imgPath = imgPath; }
 }
