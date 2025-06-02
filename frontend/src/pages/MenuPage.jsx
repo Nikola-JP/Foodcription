@@ -45,7 +45,7 @@ const MenuPage = () => {
       const formattedMeals = data.map(item => ({
         id: item.id,
         naziv: item.naziv,
-        image: `/images/${encodeURIComponent(item.naziv)}.jpg`
+        image: item.imgPath
       }));
       setMeals(formattedMeals);
       setLoading(false);
@@ -72,7 +72,7 @@ const MenuPage = () => {
               <Link to={`/meal/${meal.id}`}>
                 <div className="relative w-[230px] h-[290px] mx-auto">
                   <img
-                    src={meal.image}
+                    src={encodeURI(meal.image)}
                     alt={meal.naziv}
                     className="w-full h-full rounded-[53px] object-cover border-2 border-[#14AE5C] shadow-md transition-transform duration-300 group-hover:rotate-1 group-hover:scale-105 group-hover:shadow-lg"
                   />

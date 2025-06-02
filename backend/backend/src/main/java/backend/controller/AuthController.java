@@ -48,16 +48,29 @@ public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Korisnik korisnik) {
-        try {
-            if (korisnik.getRole() == null) {
-                korisnik.setRole(Korisnik.Role.user);
-            }
-            return ResponseEntity.ok(korisnikService.register(korisnik));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Greška na serveru: " + e.getMessage());
+    try {
+        if (korisnik.getRole() == null) {
+            korisnik.setRole(Korisnik.Role.user); // Defaultna uloga
         }
+
+        // 1. Registriraj korisnika u bazi
+        Korisnik savedUser = korisnikService.register(korisnik);
+
+        // 2. Generiraj token (koristi email + rolu, kao i u loginu)
+        String token = jwtUtil.generateToken(savedUser.getEmailKorisnika(), savedUser.getRole().name());
+
+        // 3. Pripremi response za frontend (isti format kao kod login)
+        Map<String, Object> response = new HashMap<>();
+        response.put("user", savedUser);
+        response.put("token", token);
+
+        return ResponseEntity.ok(response);
+
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body("Greška na serveru: " + e.getMessage());
     }
+}
 }

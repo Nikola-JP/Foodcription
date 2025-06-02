@@ -1,8 +1,22 @@
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { useNavigate } from "react-router-dom";
 import Footer from '../components/Footer';
 
-const UserDashboard = ({ userName = 'Korisnik', weeklyRecommendation = 'Zdrava preporuka tjedna' }) => {
+const UserDashboard = ({ weeklyRecommendation = 'Zdrava preporuka tjedna' }) => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+      // Pull user from localStorage or sessionStorage
+      const storedUser = localStorage.getItem("user");
+      if (!storedUser) {
+        navigate("/login"); // Redirect if not logged in
+      } else {
+        setUser(JSON.parse(storedUser));
+      }
+    }, [navigate]);
+  if (!user) return null;
   return (
     <div className="flex flex-col min-h-screen bg-white">
       
@@ -33,7 +47,7 @@ const UserDashboard = ({ userName = 'Korisnik', weeklyRecommendation = 'Zdrava p
 
         {/* 👋 Pozdrav i gumbi ispod */}
         <div className="text-center mt-12 space-y-8">
-          <h1 className="text-3xl font-bold">Pozdrav, {userName}!</h1>
+          <h1 className="text-3xl font-bold">Pozdrav, {user.imeKorisnika}!</h1>
           <div>
             <h2 className="text-2xl font-bold mb-2">Poruka tjedna:</h2>
             <p className="text-xl font-semibold">Tko rano rani, dvije sreće grabi!</p>

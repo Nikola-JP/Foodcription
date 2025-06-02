@@ -6,7 +6,7 @@ function Navbar({ onSignIn, onRegister, user, onLogout }) {
 
   return (
     <nav className="flex justify-between items-center p-4 bg-white shadow-md">
-      <Link to="/">
+      <Link to="/moj-dashboard">
         <img src={logo} alt="Foodcription Logo" className="h-16 w-auto" />
       </Link>
       <ul className="flex space-x-6 text-gray-700 font-medium items-center">

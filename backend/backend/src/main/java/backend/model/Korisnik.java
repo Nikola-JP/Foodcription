@@ -27,6 +27,9 @@ public class Korisnik {
     @Column(name = "role")
     private Role role;
 
+    @Column(name = "mob_korisnika")
+    private String phone;
+
     public enum Role {
         user, admin
     }
@@ -79,5 +82,13 @@ public class Korisnik {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
