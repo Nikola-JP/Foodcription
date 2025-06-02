@@ -7,8 +7,8 @@ const RegisterForm = ({ onClose }) => {
     imeKorisnika: '',
     prezimeKorisnika: '',
     emailKorisnika: '',
-    lozinkaKorisnika: ''
-    
+    lozinkaKorisnika: '',
+    mobKorisnika: ''
   });
 
   const handleChange = e => {
@@ -28,14 +28,28 @@ const RegisterForm = ({ onClose }) => {
       });
 
       if (!res.ok) {
-        const message = await res.text(); // Get message from backend
+        const message = await res.text();
         throw new Error(message);
       }
 
-      alert("Uspješna registracija! Možete se prijaviti.");
-      localStorage.setItem("user", JSON.stringify(user));
+      const data = await res.json();
+      const user = data.user;
+      const token = data.token;
+
+      alert(`Dobrodošli, ${user.imeKorisnika}!`);
+
+      localStorage.setItem("user", JSON.stringify({
+        ...user,
+        token
+      }));
+
       onClose();
-      navigate("/dashboard"); // Redirect after login
+
+      const redirectPath = sessionStorage.getItem("redirectAfterLogin") || "/dashboard";
+      sessionStorage.removeItem("redirectAfterLogin");
+
+      navigate(redirectPath);
+
     } catch (error) {
       alert(error.message || "Greška prilikom registracije.");
       console.error("Registration error:", error);
@@ -75,7 +89,13 @@ const RegisterForm = ({ onClose }) => {
         onChange={handleChange}
         required
       />
-      <button className="bg-green-600 text-white px-4 py-2 w-full rounded">Register</button>
+      <input
+        className="border p-2 w-full mb-2"
+        name="phone"
+        placeholder="+385000000000"
+        onChange={handleChange}
+      />
+      <button className="bg-green-600 text-white px-4 py-2 w-full rounded hover:bg-green-700 transition">Register</button>
     </form>
   );
 };

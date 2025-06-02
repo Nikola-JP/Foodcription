@@ -7,7 +7,7 @@ const sampleMeals = [
   { id: 2, day: 'Ponedjeljak', name: 'Štrukli sa sirom', delivered: true },
   { id: 3, day: 'Utorak', name: 'Goulash', delivered: false },
   { id: 4, day: 'Srijeda', name: 'Voćna salata', delivered: false },
-  { id: 5, day: 'Četvrtak', name: 'Pesto Pasta', delivered: false },
+  { id: 5, day: 'Četvrtak', name: 'Pesto pasta', delivered: false },
   { id: 6, day: 'Petak', name: 'Juha od dinje', delivered: false },
   { id: 7, day: 'Subota', name: 'Štrukli sa sirom', delivered: false },
   { id: 8, day: 'Nedjelja', name: 'Goulash', delivered: false },
