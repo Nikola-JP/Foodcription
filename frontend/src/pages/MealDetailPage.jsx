@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import MealHeader from '../components/MealHeader';
 import MealNutrition from '../components/MealNutrition';
@@ -23,60 +23,71 @@ function parseNutritivneVrijednosti(nutritivneString) {
 }
 
 const MealDetailPage = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // za pristup preko ID-a
+  const [searchParams] = useSearchParams(); // za pristup preko ?meal=...&day=...
+
   const [meal, setMeal] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const mealNameFromParams = searchParams.get("meal");
+  const selectedDay = searchParams.get("day");
+  const fromDashboard = searchParams.get("from") === "dashboard";
+
   useEffect(() => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = user?.token;
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
 
-  if (!token) {
-    setError("User not authenticated.");
-    setLoading(false);
-    return;
-  }
+    if (!token) {
+      setError("User not authenticated.");
+      setLoading(false);
+      return;
+    }
 
-  fetch(`http://localhost:8080/api/meals/${id}`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(res => {
-      if (!res.ok) throw new Error('Jelo nije pronađeno');
-      console.error('Fetch status:', res.status);
-      return res.json();
+    // Ako imamo meal name iz search parametara
+    const endpoint = id
+      ? `http://localhost:8080/api/meals/${id}`
+      : `http://localhost:8080/api/meals/naziv/${encodeURIComponent(mealNameFromParams)}`;
+
+    fetch(endpoint, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .then(data => {
-      const nutrijenti = parseNutritivneVrijednosti(data.nutritivneVrijednosti);
-      setMeal({
-        id: data.id,
-        naziv: data.naziv,
-        opis: data.opis,
-        slika: `/images/${encodeURIComponent(data.naziv)}.jpg`,
-        nutrijenti,
-        recenzije: [
-          { autor: 'Maja', grad: 'Zagreb', tekst: 'Odlična salata!' },
-          { autor: 'Ivan', grad: 'Rijeka', tekst: 'Medaljoni top, svježa rajčica, super dressing.' },
-          { autor: 'Lucija', grad: 'Split', tekst: 'Nešto fino bez grižnje savjesti.' }
-        ]
+      .then(res => {
+        if (!res.ok) throw new Error('Jelo nije pronađeno');
+        return res.json();
+      })
+      .then(data => {
+        const nutrijenti = parseNutritivneVrijednosti(data.nutritivneVrijednosti);
+        setMeal({
+          id: data.id,
+          naziv: data.naziv,
+          opis: data.opis,
+          slika: `/images/${encodeURIComponent(data.naziv)}.jpg`,
+          kategorija: data.kategorija,
+          nutrijenti,
+          recenzije: [
+            { autor: 'Maja', grad: 'Zagreb', tekst: 'Odlična salata!' },
+            { autor: 'Ivan', grad: 'Rijeka', tekst: 'Medaljoni top, svježa rajčica, super dressing.' },
+            { autor: 'Lucija', grad: 'Split', tekst: 'Nešto fino bez grižnje savjesti.' }
+          ]
+        });
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
       });
-      setLoading(false);
-    })
-    .catch(err => {
-      setError(err.message);
-      setLoading(false);
-    });
-}, [id]);
+  }, [id, mealNameFromParams]);
 
   if (loading) return <p className="text-center mt-10">Učitavanje podataka o jelu...</p>;
   if (error) return <p className="text-center mt-10 text-red-600">Greška: {error}</p>;
 
   return (
     <div className="bg-white min-h-screen">
-      <MealHeader meal={meal} />
+      <MealHeader meal={meal} selectedDay={selectedDay} fromDashboard={fromDashboard} />
       <MealNutrition nutrijenti={meal.nutrijenti} />
       <MealReviews recenzije={meal.recenzije} />
       <NewsletterSection />

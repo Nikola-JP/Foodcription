@@ -13,6 +13,9 @@ import MenuPage from './pages/MenuPage';
 import MealDetailPage from './pages/MealDetailPage';
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import EditMenuPage from "./pages/EditMenuPage";
+import UserDashboard from './pages/UserDashboard';
+import EditProfilePage from "./pages/EditProfilePage";
 
 function App() {
   const { isOpen, mode, openModal, closeModal } = useAuthModal();
@@ -71,6 +74,9 @@ function App() {
         <Route path="/menu" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><MenuPage /></ProtectedRoute>} />
         <Route path="/meal/:id" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><MealDetailPage /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><Dashboard /></ProtectedRoute>} />
+        <Route path="/jelovnik" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><EditMenuPage userName={user?.ime} subscriptionType={user?.pretplata}/></ProtectedRoute>}/>
+        <Route path="/uredi-profil" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><EditProfilePage /></ProtectedRoute>} />
+        <Route path="/moj-dashboard" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><UserDashboard /></ProtectedRoute>}/>
       </Routes>
     </Router>
   );

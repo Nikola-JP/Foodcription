@@ -27,7 +27,7 @@ const SubscriptionPlans = () => {
         <div className="bg-gray-800 text-white p-8 rounded-xl shadow-md w-full max-w-sm">
           <h3 className="text-xl font-semibold mb-4">Premium plan</h3>
           <p className="text-4xl font-bold mb-2">
-            100€<span className="text-base font-normal">/mj</span>
+            70€<span className="text-base font-normal">/mj</span>
           </p>
           <ul className="mb-6 space-y-2">
             <li>&#10003; Dostava svaki dan</li>
