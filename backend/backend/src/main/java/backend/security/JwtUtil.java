@@ -33,7 +33,7 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setSubject(email)
-                .claim("role", role)
+                .claim("role", role.toUpperCase())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(secretKey)

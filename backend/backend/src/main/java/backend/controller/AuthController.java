@@ -73,4 +73,21 @@ public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
         return ResponseEntity.status(500).body("Greška na serveru: " + e.getMessage());
     }
 }
+
+@PutMapping("/{email}/password")
+    public ResponseEntity<?> changePassword(@PathVariable String email, @RequestBody Map<String, String> passwords) {
+        String oldPassword = passwords.get("oldPassword");
+        String newPassword = passwords.get("newPassword");
+
+        try {
+            korisnikService.changePassword(email, oldPassword, newPassword);
+            return ResponseEntity.ok("Lozinka promijenjena.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace(); // log za debug
+            return ResponseEntity.status(500).body("Greška pri promjeni lozinke.");
+        }  
+    }
+
 }

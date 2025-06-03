@@ -1,5 +1,7 @@
 package backend.controller;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backend.dto.UserProfileDTO;
 import backend.service.UserService;
+
 
 @RestController
 @RequestMapping("/api/profile")
@@ -26,8 +29,18 @@ public class UserProfileController {
 
     @PutMapping("/{email}")
     public ResponseEntity<Void> updateUser(@PathVariable String email, @RequestBody UserProfileDTO updatedProfile) {
+        System.out.println("Authorized PUT request to update user: " + email); // ✅ Should print
         userService.updateUserProfile(email, updatedProfile);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{email}/plan")
+    public ResponseEntity<Void> updateUserPlan(@PathVariable String email, @RequestBody UserProfileDTO updated) {
+        System.out.println("Received request to update plan for: " + email + " -> " + updated.plan);
+        userService.updateUserProfile(email, updated);
+        return ResponseEntity.noContent().build();
+    }
+
+    
 }
 

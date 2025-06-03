@@ -41,10 +41,10 @@ public class UserService {
     public void updateUserProfile(String email, UserProfileDTO updated) {
         Korisnik k = korisnikRepo.findByEmailKorisnika(email).orElseThrow();
 
-        k.setEmailKorisnika(updated.email);
-        k.setImeKorisnika(updated.ime);
-        k.setPrezimeKorisnika(updated.prezime);
-        k.setPhone(updated.broj);
+        if (updated.email != null) k.setEmailKorisnika(updated.email);
+        if (updated.ime != null) k.setImeKorisnika(updated.ime);
+        if (updated.prezime != null) k.setPrezimeKorisnika(updated.prezime);
+        if (updated.broj != null) k.setPhone(updated.broj);
         korisnikRepo.save(k);
 
         if (updated.plan != null) {
@@ -58,4 +58,6 @@ public class UserService {
             }
         }
     }
+
+    
 }
