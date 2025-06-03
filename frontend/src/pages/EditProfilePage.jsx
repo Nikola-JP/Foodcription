@@ -37,7 +37,6 @@ const EditProfilePage = () => {
 }, []);
 
   const userEmail = user?.email;
-  const encodedEmail = encodeURIComponent(userEmail);
 
   const updateUserField = async (field, value) => {
   try {
@@ -55,7 +54,7 @@ const EditProfilePage = () => {
       return;
     }
 
-    const response = await fetch(`http://localhost:8080/api/profile/${encodedEmail}`, {
+    const response = await fetch(`http://localhost:8080/api/profile/${userEmail}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -77,34 +76,34 @@ const EditProfilePage = () => {
 };
 
   const updatePlan = async (newPlan) => {
-    try {
-      const userString = localStorage.getItem("user");
-      if (!userString) return;
+  try {
+    const userString = localStorage.getItem("user");
+    if (!userString) return;
 
-      const userWrapper = JSON.parse(userString);
-      const userObj = JSON.parse(userWrapper.user);
-      const token = userObj.token;
+    const userObj = JSON.parse(userString);
+    const token = userObj.token;
 
-      const res = await fetch(`http://localhost:8080/api/profile/${encodedEmail}/plan`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ plan: newPlan }),
-      });
+    const res = await fetch(`http://localhost:8080/api/profile/${userEmail}/plan`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ plan: newPlan }),
+    });
 
-      if (res.ok) {
-        setUser((prev) => ({ ...prev, plan: newPlan }));
-        setSuccessMessage("Plan pretplate uspješno promijenjen.");
-      } else {
-        setSuccessMessage("Greška prilikom promjene plana.");
-      }
-    } catch (err) {
-      console.error(err);
+    if (res.ok) {
+      setUser((prev) => ({ ...prev, plan: newPlan }));
+      setSuccessMessage("Plan pretplate uspješno promijenjen.");
+    } else {
       setSuccessMessage("Greška prilikom promjene plana.");
     }
-  };
+  } catch (err) {
+    console.error(err);
+    setSuccessMessage("Greška prilikom promjene plana.");
+  }
+};
+
 
   const handlePlanChange = (newPlan) => {
     if (newPlan === user.plan) {

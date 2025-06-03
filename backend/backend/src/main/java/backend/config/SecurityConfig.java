@@ -2,10 +2,13 @@ package backend.config;
 
 import backend.security.JwtAuthenticationFilter;
 import backend.security.JwtUtil;
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +18,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+
 
 @Configuration
 public class SecurityConfig {
@@ -41,11 +45,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/**").hasAnyRole("USER", "ADMIN")  // ✅ Moved here
+                .requestMatchers("/api/profile/**").hasAnyRole("ADMIN", "USER") // ✅ Moved here
                 .anyRequest().authenticated()
             )
             .cors(Customizer.withDefaults())
-            .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();   
     }
@@ -61,5 +66,10 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", config);
         return source;
+    }
+
+    @PostConstruct
+    public void initSecurityContextHolder() {
+        SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_THREADLOCAL);
     }
 }

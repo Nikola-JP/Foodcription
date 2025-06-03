@@ -6,25 +6,56 @@ const ChangePasswordModal = ({ onClose }) => {
   const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState('');
 
-  const handlePasswordChange = () => {
-    const mockStoredPassword = 'tajna123'; // ⚠️ Demo svrha – zamijeniti API logikom
+  const handlePasswordChange = async () => {
+  if (newPassword.length < 6) {
+    setError('Nova lozinka mora imati barem 6 znakova.');
+    setSuccessMessage('');
+    return;
+  }
 
-    if (oldPassword !== mockStoredPassword) {
+  const userString = localStorage.getItem('user');
+  if (!userString) {
+    setError('Korisnik nije prijavljen.');
+    return;
+  }
+
+  const user = JSON.parse(userString);
+  const email = user.emailKorisnika || user.email; // ovisno kako si to postavio
+  const token = user.token;
+
+  try {
+    const response = await fetch(`http://localhost:8080/api/auth/${email}/password`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        oldPassword,
+        newPassword,
+      }),
+    });
+
+    if (response.ok) {
+      setError('');
+      setSuccessMessage('Lozinka uspješno promijenjena!');
+      setOldPassword('');
+      setNewPassword('');
+      setTimeout(onClose, 2000); // Zatvori modal nakon 2s
+    } else if (response.status === 403) {
       setError('Stara lozinka nije točna.');
       setSuccessMessage('');
-      return;
-    }
-
-    if (newPassword.length < 6) {
-      setError('Nova lozinka mora imati barem 6 znakova.');
+    } else {
+      setError('Dogodila se greška. Pokušajte ponovno.');
       setSuccessMessage('');
-      return;
     }
+  } catch (err) {
+    console.error(err);
+    setError('Greška prilikom slanja zahtjeva.');
+    setSuccessMessage('');
+  }
+};
 
-    setError('');
-    setSuccessMessage('Lozinka uspješno promijenjena!');
-    // TODO: Pošalji novu lozinku na backend
-  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

@@ -42,4 +42,16 @@ public class KorisnikService {
         return korisnikRepository.findByEmailKorisnika(normalizedEmail)
                 .filter(user -> passwordEncoder.matches(password, user.getLozinkaKorisnika()));
     }
+
+    public void changePassword(String email, String oldPassword, String newPassword) {
+    Korisnik korisnik = korisnikRepository.findByEmailKorisnika(email.toLowerCase())
+        .orElseThrow(() -> new IllegalArgumentException("Korisnik nije pronađen."));
+
+    if (!passwordEncoder.matches(oldPassword, korisnik.getLozinkaKorisnika())) {
+        throw new IllegalArgumentException("Stara lozinka nije točna.");
+    }
+
+    korisnik.setLozinkaKorisnika(passwordEncoder.encode(newPassword));
+    korisnikRepository.save(korisnik);
+}
 }
