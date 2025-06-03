@@ -61,7 +61,9 @@ function App() {
                 subtitle="Zdravi i ukusni obroci dostavljeni na tvoja vrata"
                 backgroundImage="/images/HeroImage.jpg"
                 primaryButton="Odaberi plan"
-                secondaryButton="Kontaktiraj nas"
+                secondaryButton="Pogledaj jelovnik"
+                user={user}
+                onRegister={() => openModal("register")}
               />
               <FeatureGrid />
               <InfoGrid />
@@ -70,7 +72,15 @@ function App() {
             </>
           }
         />
-        <Route path="/pretplata" element={<SubscriptionPage />} />
+        <Route
+          path="/pretplata"
+          element={
+            <SubscriptionPage
+              user={user}
+              onRegister={() => openModal("register")}
+            />
+          }
+        />
         <Route path="/menu" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><MenuPage /></ProtectedRoute>} />
         <Route path="/meal/:id" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><MealDetailPage /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><Dashboard /></ProtectedRoute>} />

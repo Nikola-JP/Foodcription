@@ -6,7 +6,11 @@ const InfoRow = ({ label, value, action, onClick }) => (
       <span className="font-semibold">{label}</span>
       <span className="bg-green-500 text-white px-3 py-1 rounded-full">{value}</span>
     </div>
-    <button onClick={onClick} className="bg-green-600 text-white px-4 py-2 rounded-full">{action}</button>
+    {action && (
+      <button onClick={onClick} className="bg-green-600 text-white px-4 py-2 rounded-full">
+        {action}
+      </button>
+    )}
   </div>
 );
 

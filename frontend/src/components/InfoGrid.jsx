@@ -9,8 +9,8 @@ function InfoGrid() {
         <div className="flex items-start space-x-4">
           <Info className="text-green-500 w-8 h-8 mt-1" />
           <div>
-            <h3 className="text-green-600 text-lg font-semibold mb-1">Kuhari info</h3>
-            <p className="text-gray-600 text-sm">Tekst koji govori o načinu pripreme hrane.</p>
+            <h3 className="text-green-600 text-lg font-semibold mb-1">Kuhari s iskustvom</h3>
+            <p className="text-gray-600 text-sm">Naš tim čine profesionalni kuhari s dugogodišnjim iskustvom u pripremi zdravih i ukusnih jela.</p>
           </div>
         </div>
 
@@ -18,8 +18,8 @@ function InfoGrid() {
         <div className="flex items-start space-x-4">
           <Info className="text-green-500 w-8 h-8 mt-1" />
           <div>
-            <h3 className="text-green-600 text-lg font-semibold mb-1">Hrana info</h3>
-            <p className="text-gray-600 text-sm">Opći info o hrani koja se radi.</p>
+            <h3 className="text-green-600 text-lg font-semibold mb-1">Samo provjereni sastojci</h3>
+            <p className="text-gray-600 text-sm">Koristimo isključivo svježe i lokalne namirnice, bez kompromisa na kvaliteti.</p>
           </div>
         </div>
 
@@ -27,8 +27,8 @@ function InfoGrid() {
         <div className="flex items-start space-x-4">
           <Info className="text-green-500 w-8 h-8 mt-1" />
           <div>
-            <h3 className="text-green-600 text-lg font-semibold mb-1">Hrana spremna za mikrovalnu / pećnicu</h3>
-            <p className="text-gray-600 text-sm">Dodatni opis da je hrana spremna.</p>
+            <h3 className="text-green-600 text-lg font-semibold mb-1">Pristupačne cijene</h3>
+            <p className="text-gray-600 text-sm">Naša misija je omogućiti svakome zdrav i ukusan obrok, bez opterećenja za novčanik.</p>
           </div>
         </div>
 
@@ -36,8 +36,8 @@ function InfoGrid() {
         <div className="flex items-start space-x-4">
           <Info className="text-green-500 w-8 h-8 mt-1" />
           <div>
-            <h3 className="text-green-600 text-lg font-semibold mb-1">Naglasak jeftine cijene</h3>
-            <p className="text-gray-600 text-sm">Pristupačna cijena planova.</p>
+            <h3 className="text-green-600 text-lg font-semibold mb-1">Pristupačne cijene</h3>
+            <p className="text-gray-600 text-sm">Naša misija je omogućiti svakome zdrav i ukusan obrok, bez opterećenja za novčanik</p>
           </div>
         </div>
 

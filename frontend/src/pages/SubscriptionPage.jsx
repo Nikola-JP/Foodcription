@@ -3,7 +3,7 @@ import SubscriptionPlans from "../components/SubscriptionPlans";
 import FAQs from "../components/Faq";
 import Footer from "../components/Footer";
 
-const SubscriptionPage = () => {
+const SubscriptionPage = ({ user, onRegister }) => {
   return (
     <>
       <HeroSection
@@ -11,7 +11,7 @@ const SubscriptionPage = () => {
         subtitle="Zdravi i ukusni obroci dostavljeni na tvoja vrata"
         backgroundImage="public/images/HeroImage.jpg"
       />
-      <SubscriptionPlans />
+      <SubscriptionPlans user={user} onRegister={onRegister} />
       <FAQs />
       <Footer />
     </>

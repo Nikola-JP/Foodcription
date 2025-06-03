@@ -1,25 +1,93 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Footer from '../components/Footer';
 
-const sampleMeals = [
-  { id: 2, day: 'Ponedjeljak', name: 'Štrukli sa sirom', delivered: true },
-  { id: 3, day: 'Utorak', name: 'Goulash', delivered: false },
-  { id: 4, day: 'Srijeda', name: 'Voćna salata', delivered: false },
-  { id: 5, day: 'Četvrtak', name: 'Pesto pasta', delivered: false },
-  { id: 6, day: 'Petak', name: 'Juha od dinje', delivered: false },
-  { id: 7, day: 'Subota', name: 'Štrukli sa sirom', delivered: false },
-  { id: 8, day: 'Nedjelja', name: 'Goulash', delivered: false },
-]; //DODATI IDeve koji trebaju biti za njih 
+const daysOrder = [
+  'Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak', 'Subota', 'Nedjelja'
+];
 
-const EditMenuPage = ({ userName = 'Korisnik', subscriptionType = 'basic' }) => {
-  const [meals, setMeals] = useState(sampleMeals);
-  const [removedMeals, setRemovedMeals] = useState({}); // Praćenje koji su dani uklonjeni
+const sampleMeals = [
+  { day: 'Ponedjeljak', name: '', id: null, delivered: false },
+  { day: 'Utorak', name: '', id: null, delivered: false },
+  { day: 'Srijeda', name: '', id: null, delivered: false },
+  { day: 'Četvrtak', name: '', id: null, delivered: false },
+  { day: 'Petak', name: '', id: null, delivered: false },
+  { day: 'Subota', name: '', id: null, delivered: false },
+  { day: 'Nedjelja', name: '', id: null, delivered: false },
+];
+
+const EditMenuPage = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userName = user?.ime || "Korisnik";
+  const subscriptionType = user?.plan?.toLowerCase() || "basic";
+  const [meals, setMeals] = useState([]);
+  const [removedMeals, setRemovedMeals] = useState({});
+  const [allMeals, setAllMeals] = useState([]);
+  const location = useLocation();
+
+  // Dohvati sva jela iz baze na početku
+  useEffect(() => {
+    fetch("http://localhost:8080/api/meals")
+      .then(res => res.json())
+      .then(data => setAllMeals(data));
+  }, []);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    // Ako allMeals nije još stigao, čekaj!
+    if (!allMeals || allMeals.length === 0) return;
+
+    fetch("http://localhost:8080/api/user/meals", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        let baseMeals = sampleMeals.map(dayObj => {
+          const found = data.find(item => item.dan === dayObj.day);
+          if (found && found.jeloId) {
+            const mealInfo = allMeals.find(m => m.id === found.jeloId);
+            return {
+              ...dayObj,
+              id: found.jeloId,
+              name: mealInfo ? mealInfo.naziv : "",
+              image: mealInfo ? mealInfo.imgPath : "",
+              delivered: false
+            };
+          }
+          return dayObj;
+        });
+
+        const pendingMenu = JSON.parse(localStorage.getItem("pendingMenu")) || {};
+        const mergedMeals = baseMeals.map(meal => {
+          if (pendingMenu.hasOwnProperty(meal.day)) {
+            if (pendingMenu[meal.day] === null) {
+              return { ...meal, name: "", id: null, image: "" };
+            }
+            return { ...meal, ...pendingMenu[meal.day] };
+          }
+          return meal;
+        });
+
+        setMeals(mergedMeals);
+      });
+  }, [location, allMeals]);
 
   const removeMeal = (day) => {
-    // Označi jelo za taj dan kao uklonjeno
     setRemovedMeals(prev => ({ ...prev, [day]: true }));
+
+    // Ažuriraj pendingMenu u localStorage
+    const pendingMenu = JSON.parse(localStorage.getItem("pendingMenu")) || {};
+    pendingMenu[day] = null; // ili {} ako ti je lakše za provjeru
+    localStorage.setItem("pendingMenu", JSON.stringify(pendingMenu));
+
+    // Ažuriraj meals state (opcionalno, ako želiš odmah prikazati promjenu)
+    setMeals(prevMeals =>
+      prevMeals.map(meal =>
+        meal.day === day ? { ...meal, name: "", id: null } : meal
+      )
+    );
   };
 
   // Prikaz dana ovisno o pretplati
@@ -43,6 +111,29 @@ const EditMenuPage = ({ userName = 'Korisnik', subscriptionType = 'basic' }) => 
       .toString()
       .padStart(2, '0')}.`;
 
+  const handleSaveChanges = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+
+    // Pripremi podatke za backend
+    const menuToSend = meals.map(meal => ({
+      day: meal.day,
+      mealId: meal.id || null
+    }));
+
+    await fetch("http://localhost:8080/api/user/meals", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(menuToSend),
+    });
+
+    localStorage.removeItem("pendingMenu");
+    alert("Izmjene spremljene!");
+  };
+
   return (
     <>
       
@@ -58,15 +149,22 @@ const EditMenuPage = ({ userName = 'Korisnik', subscriptionType = 'basic' }) => 
             <div key={index} className="border p-4 rounded-xl">
               <p className="font-semibold mb-1">{meal.day}</p>
 
-              {removedMeals[meal.day] ? (
+              {removedMeals[meal.day] || !meal.name ? (
                 // Ako je uklonjeno, prikaži gumb za dodavanje
-                <Link to={`/meal/${meal.id}?fromDashboard=true&day=${meal.day}`}>
-                  <button className="bg-blue-500 text-white px-3 py-1 rounded-full">➕ Dodaj jelo</button>
-                </Link>
+                <div className="flex flex-col items-center justify-center h-full">
+                  <div className="w-full h-24 flex items-center justify-center bg-gray-100 rounded mb-2 text-gray-400">
+                    Nema jela
+                  </div>
+                  <Link to={`/menu?fromDashboard=true&day=${meal.day}`}>
+                    <button className="bg-green-600 text-white px-3 py-1 rounded-full">
+                      Dodaj jelo
+                    </button>
+                  </Link>
+                </div>
               ) : (
                 <>
                   <img
-                    src={`/images/${encodeURIComponent(meal.name)}.jpg`}
+                    src={meal.image ? meal.image : `/images/${encodeURIComponent(meal.name)}.jpg`}
                     alt={meal.name}
                     className="rounded mb-2"
                   />
@@ -84,9 +182,11 @@ const EditMenuPage = ({ userName = 'Korisnik', subscriptionType = 'basic' }) => 
                       >
                         Ukloni
                       </button>
-                      <button className="bg-green-600 text-white px-3 py-1 rounded-full">
-                        Zamijeni jelo
-                      </button>
+                      <Link to={`/menu?fromDashboard=true&day=${meal.day}`}>
+                        <button className="bg-green-600 text-white px-3 py-1 rounded-full">
+                          Zamijeni jelo
+                        </button>
+                      </Link>
                     </div>
                   )}
                 </>
@@ -95,7 +195,7 @@ const EditMenuPage = ({ userName = 'Korisnik', subscriptionType = 'basic' }) => 
           ))}
         </div>
 
-        <button className="mt-8 bg-green-600 text-white px-6 py-2 rounded-full">
+        <button onClick={handleSaveChanges} className="mt-8 bg-green-600 text-white px-6 py-2 rounded-full">
           💾 Spremi izmjene
         </button>
       </div>

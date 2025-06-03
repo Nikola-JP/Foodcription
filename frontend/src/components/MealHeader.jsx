@@ -1,40 +1,20 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 const MealHeader = ({ meal, selectedDay, fromDashboard }) => {
+  const navigate = useNavigate();
+
   const handleAddToMenu = () => {
-    // Ako se ne zna dan, ne radi ništa
-    if (!selectedDay) return;
-
-    // 🛠️ Ovo se odkomentira kada backend endpoint bude spreman
-    /*
-    const user = JSON.parse(localStorage.getItem("user"));
-    const token = user?.token;
-
-    fetch('http://localhost:8080/api/user/meals', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        day: selectedDay,
-        mealId: meal.id
-      })
-    })
-    .then(res => {
-      if (!res.ok) throw new Error("Greška pri dodavanju jela");
-      return res.json();
-    })
-    .then(data => {
-      console.log('Jelo dodano:', data);
-      // Možeš ovdje preusmjeriti ili pokazati notifikaciju
-    })
-    .catch(err => {
-      console.error("Greška:", err.message);
-    });
-    */
-
-    alert(`Jelo "${meal.naziv}" dodano za dan ${selectedDay}`);
+    const pendingMenu = JSON.parse(localStorage.getItem("pendingMenu")) || {};
+    // Mapiraj polja na očekivana imena u EditMenuPage
+    pendingMenu[selectedDay] = {
+      id: meal.id,
+      name: meal.naziv, // OVO je bitno!
+      image: meal.slika || meal.imgPath, // Ovisno kako se zove polje
+      delivered: false
+    };
+    localStorage.setItem("pendingMenu", JSON.stringify(pendingMenu));
+    navigate("/jelovnik");
   };
 
   return (
@@ -51,7 +31,7 @@ const MealHeader = ({ meal, selectedDay, fromDashboard }) => {
         </span>
         <h1 className="text-3xl font-bold mt-2">{meal.naziv}</h1>
 
-        {fromDashboard && (
+        {fromDashboard && selectedDay && (
           <button
             onClick={handleAddToMenu}
             className="mt-4 mb-6 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"

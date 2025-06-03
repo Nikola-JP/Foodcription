@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom";
 import Footer from '../components/Footer';
 
 const UserDashboard = ({ weeklyRecommendation = 'Zdrava preporuka tjedna' }) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const location = useLocation();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("user")));
+  }, [location]);
+
   useEffect(() => {
       // Pull user from localStorage or sessionStorage
       const storedUser = localStorage.getItem("user");
@@ -17,6 +23,10 @@ const UserDashboard = ({ weeklyRecommendation = 'Zdrava preporuka tjedna' }) => 
       }
     }, [navigate]);
   if (!user) return null;
+
+  const ime = user.ime || user.imeKorisnika;
+  
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       
@@ -47,7 +57,7 @@ const UserDashboard = ({ weeklyRecommendation = 'Zdrava preporuka tjedna' }) => 
 
         {/* 👋 Pozdrav i gumbi ispod */}
         <div className="text-center mt-12 space-y-8">
-          <h1 className="text-3xl font-bold">Pozdrav, {user.imeKorisnika}!</h1>
+          <h1 className="text-3xl font-bold">Pozdrav, {ime}!</h1>
           <div>
             <h2 className="text-2xl font-bold mb-2">Poruka tjedna:</h2>
             <p className="text-xl font-semibold">Tko rano rani, dvije sreće grabi!</p>

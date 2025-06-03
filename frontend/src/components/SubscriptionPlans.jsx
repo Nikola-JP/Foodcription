@@ -1,7 +1,18 @@
 // SubscriptionPlans.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const SubscriptionPlans = () => {
+const SubscriptionPlans = ({ user, onRegister }) => {
+  const navigate = useNavigate();
+
+  const handleChoose = () => {
+    if (user) {
+      navigate("/uredi-profil");
+    } else if (onRegister) {
+      onRegister(); // Otvori modal za registraciju
+    }
+  };
+
   return (
     <section className="py-20 bg-gradient-to-r from-green-400 to-green-500 text-white">
       <div className="text-center mb-12">
@@ -14,13 +25,18 @@ const SubscriptionPlans = () => {
           <p className="text-4xl font-bold mb-2">
             50€<span className="text-base font-normal">/mj</span>
           </p>
-          <ul className="mb-6 space-y-2">
+          <ul className="mb-6 space-y-2 text-left">
             <li>&#10003; Dostava od ponedjeljka do petka</li>
             <li>&#10003; 20+ jela u rotaciji</li>
             <li>&#10003; Personalizirani meni</li>
+            <li>&#10003; Idealno za zaposlene i studente</li>
+            <li>&#10003; Uvijek svježe i ukusno</li>
           </ul>
-          <button className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">
-            Odaberi
+          <button
+            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition w-full"
+            onClick={handleChoose}
+          >
+            Odaberi Basic
           </button>
         </div>
 
@@ -29,14 +45,18 @@ const SubscriptionPlans = () => {
           <p className="text-4xl font-bold mb-2">
             70€<span className="text-base font-normal">/mj</span>
           </p>
-          <ul className="mb-6 space-y-2">
-            <li>&#10003; Dostava svaki dan</li>
-            <li>&#10003; Pristup ekskluzivnim jelima</li>
-            <li>&#10003; Besplatna promjena jelovnika</li>
-            <li>&#10003; Prioritetna podrška</li>
+          <ul className="mb-6 space-y-2 text-left">
+            <li>&#10003; Dostava svaki dan (uključuje vikend)</li>
+            <li>&#10003; Pristup ekskluzivnim jelima i desertima</li>
+            <li>&#10003; Besplatna i neograničena promjena jelovnika</li>
+            <li>&#10003; Prioritetna korisnička podrška</li>
+            <li>&#10003; Savršeno za obitelji i gurmane</li>
           </ul>
-          <button className="bg-white text-green-600 px-6 py-2 rounded hover:bg-gray-300 transition">
-            Odaberi
+          <button
+            className="bg-white text-green-600 px-6 py-2 rounded hover:bg-gray-300 transition w-full"
+            onClick={handleChoose}
+          >
+            Odaberi Premium
           </button>
         </div>
       </div>
