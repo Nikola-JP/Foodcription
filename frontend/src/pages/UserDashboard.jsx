@@ -3,24 +3,26 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom";
 import Footer from '../components/Footer';
+import ChangePasswordModal from '../components/ChangePasswordModal';
 
 const UserDashboard = ({ weeklyRecommendation = 'Zdrava preporuka tjedna' }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+
   useEffect(() => {
-      // Pull user from localStorage or sessionStorage
-      const storedUser = localStorage.getItem("user");
-      if (!storedUser) {
-        navigate("/login"); // Redirect if not logged in
-      } else {
-        setUser(JSON.parse(storedUser));
-      }
-    }, [navigate]);
+    // Pull user from localStorage or sessionStorage
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      navigate("/login"); // Redirect if not logged in
+    } else {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [navigate]);
+
   if (!user) return null;
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      
-
       {/* 📦 Glavni sadržaj u gridu */}
       <main className="flex-1 px-4 py-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 items-center justify-center gap-8 max-w-7xl mx-auto">
@@ -64,6 +66,15 @@ const UserDashboard = ({ weeklyRecommendation = 'Zdrava preporuka tjedna' }) => 
                 🍽️ Promijeni jelovnik
               </button>
             </Link>
+
+            {/* Only show this button if user is admin */}
+            {user.role === 'admin' && (
+              <Link to="/tablica">
+                <button className="bg-green-600 text-white text-xl px-10 py-4 rounded-full shadow-lg hover:bg-green-700 hover:scale-105 transition">
+                  👥 Pregled korisnika
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       </main>

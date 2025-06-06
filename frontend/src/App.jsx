@@ -16,6 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import EditMenuPage from "./pages/EditMenuPage";
 import UserDashboard from './pages/UserDashboard';
 import EditProfilePage from "./pages/EditProfilePage";
+import UserTable from "./pages/UserTable";
 
 function App() {
   const { isOpen, mode, openModal, closeModal } = useAuthModal();
@@ -71,12 +72,13 @@ function App() {
           }
         />
         <Route path="/pretplata" element={<SubscriptionPage />} />
-        <Route path="/menu" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><MenuPage /></ProtectedRoute>} />
-        <Route path="/meal/:id" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><MealDetailPage /></ProtectedRoute>} />
-        <Route path="/dashboard" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><Dashboard /></ProtectedRoute>} />
-        <Route path="/jelovnik" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><EditMenuPage userName={user?.ime} subscriptionType={user?.pretplata}/></ProtectedRoute>}/>
-        <Route path="/uredi-profil" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><EditProfilePage /></ProtectedRoute>} />
-        <Route path="/moj-dashboard" element={<ProtectedRoute onRequireLogin={() => openModal("login")}><UserDashboard /></ProtectedRoute>}/>
+        <Route path="/menu" element={<ProtectedRoute requiredRoles={["admin", "user"]} onRequireLogin={() => openModal("login")}><MenuPage /></ProtectedRoute>} />
+        <Route path="/meal/:id" element={<ProtectedRoute requiredRoles={["admin", "user"]} onRequireLogin={() => openModal("login")}><MealDetailPage /></ProtectedRoute>} />
+        <Route path="/dashboard" element={<ProtectedRoute requiredRoles={["admin", "user"]} onRequireLogin={() => openModal("login")}><Dashboard /></ProtectedRoute>} />
+        <Route path="/jelovnik" element={<ProtectedRoute requiredRoles={["admin", "user"]} onRequireLogin={() => openModal("login")}><EditMenuPage userName={user?.ime} subscriptionType={user?.pretplata}/></ProtectedRoute>}/>
+        <Route path="/uredi-profil" element={<ProtectedRoute requiredRoles={["admin", "user"]}onRequireLogin={() => openModal("login")}><EditProfilePage /></ProtectedRoute>} />
+        <Route path="/moj-dashboard" element={<ProtectedRoute requiredRoles={["admin", "user"]} onRequireLogin={() => openModal("login")}><UserDashboard /></ProtectedRoute>}/>
+        <Route path="/tablica" element={<ProtectedRoute requiredRoles={["admin"]} onRequireLogin={() => openModal("login")}><UserTable /></ProtectedRoute>}/>
       </Routes>
     </Router>
   );

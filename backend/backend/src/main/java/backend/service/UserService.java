@@ -21,11 +21,11 @@ public class UserService {
 
     public UserProfileDTO getUserProfile(String email) {
         Korisnik k = korisnikRepo.findByEmailKorisnika(email).orElseThrow();
-        List<PretplataPoKorisniku> korisnikPretplate = pretplataPoKorisnikuRepo.findByIdKorisnika(k.getIdKorisnika());
+        List<PretplataPoKorisniku> korisnikPretplate = pretplataPoKorisnikuRepo.findByKorisnik_IdKorisnika(k.getIdKorisnika());
         String tipPretplate = "Basic";
 
         if (!korisnikPretplate.isEmpty()) {
-            Pretplata p = pretplataRepo.findById(korisnikPretplate.get(0).getIdPretplate()).orElseThrow();
+            Pretplata p = pretplataRepo.findById(korisnikPretplate.get(0).getPretplata().getIdPretplata()).orElseThrow();
             tipPretplate = p.getTipPretplate();
         }
 
@@ -49,11 +49,11 @@ public class UserService {
 
         if (updated.plan != null) {
             Pretplata newPlan = pretplataRepo.findByTipPretplate(updated.plan).orElseThrow();
-            List<PretplataPoKorisniku> pretplate = pretplataPoKorisnikuRepo.findByIdKorisnika(k.getIdKorisnika());
+            List<PretplataPoKorisniku> pretplate = pretplataPoKorisnikuRepo.findByKorisnik_IdKorisnika(k.getIdKorisnika());
 
             if (!pretplate.isEmpty()) {
                 PretplataPoKorisniku pp = pretplate.get(0);
-                pp.setIdPretplate(newPlan.getIdPretplata());
+                pp.setPretplata(newPlan);
                 pretplataPoKorisnikuRepo.save(pp);
             }
         }

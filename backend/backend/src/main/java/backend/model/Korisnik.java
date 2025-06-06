@@ -7,6 +7,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -36,6 +38,10 @@ public class Korisnik {
 
     @Column(name = "mob_korisnika")
     private String phone;
+
+    @ManyToOne
+    @JoinColumn(name = "pretplata_id")
+    private Pretplata pretplata;
 
     public enum Role {
         user, admin
@@ -98,4 +104,12 @@ public class Korisnik {
         this.phone = phone;
     }
     
+    public Pretplata getPretplata() {
+        return this.pretplata;
+    }
+
+    public void setPretplata(Pretplata pretplata) {
+        this.pretplata = pretplata;
+    }
+
 }

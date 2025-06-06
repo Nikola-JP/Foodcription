@@ -6,49 +6,58 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "fc_pretplata_po_korisniku")
 public class PretplataPoKorisniku {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPretplatePoKorisniku;
 
-    private Long idKorisnika;
-    private Long idPretplate;
+    @ManyToOne
+    @JoinColumn(name = "id_korisnika", nullable = false)
+    private Korisnik korisnik;
+
+    @ManyToOne
+    @JoinColumn(name = "id_pretplate", nullable = false)
+    private Pretplata pretplata;
+
     private Date datumPocetka;
     private Date datumZavrsetka;
     private String status;
     private String tipPlacanja;
 
-
-    public Long getId_pretplate_po_korisniku() {
-        return this.idPretplatePoKorisniku;
+    // Getters and Setters
+    public Long getIdPretplatePoKorisniku() {
+        return idPretplatePoKorisniku;
     }
 
-    public void setId_pretplate_po_korisniku(Long id_pretplate_po_korisniku) {
-        this.idPretplatePoKorisniku = id_pretplate_po_korisniku;
+    public void setIdPretplatePoKorisniku(Long idPretplatePoKorisniku) {
+        this.idPretplatePoKorisniku = idPretplatePoKorisniku;
     }
 
-    public Long getIdKorisnika() {
-        return this.idKorisnika;
+    public Korisnik getKorisnik() {
+        return korisnik;
     }
 
-    public void setIdKorisnika(Long idKorisnika) {
-        this.idKorisnika = idKorisnika;
+    public void setKorisnik(Korisnik korisnik) {
+        this.korisnik = korisnik;
     }
 
-    public Long getIdPretplate() {
-        return this.idPretplate;
+    public Pretplata getPretplata() {
+        return pretplata;
     }
 
-    public void setIdPretplate(Long idPretplate) {
-        this.idPretplate = idPretplate;
+    public void setPretplata(Pretplata pretplata) {
+        this.pretplata = pretplata;
     }
 
     public Date getDatumPocetka() {
-        return this.datumPocetka;
+        return datumPocetka;
     }
 
     public void setDatumPocetka(Date datumPocetka) {
@@ -56,7 +65,7 @@ public class PretplataPoKorisniku {
     }
 
     public Date getDatumZavrsetka() {
-        return this.datumZavrsetka;
+        return datumZavrsetka;
     }
 
     public void setDatumZavrsetka(Date datumZavrsetka) {
@@ -64,7 +73,7 @@ public class PretplataPoKorisniku {
     }
 
     public String getStatus() {
-        return this.status;
+        return status;
     }
 
     public void setStatus(String status) {
@@ -72,11 +81,10 @@ public class PretplataPoKorisniku {
     }
 
     public String getTipPlacanja() {
-        return this.tipPlacanja;
+        return tipPlacanja;
     }
 
-    public void setTip_placanja(String tipPlacanja) {
+    public void setTipPlacanja(String tipPlacanja) {
         this.tipPlacanja = tipPlacanja;
     }
-    
 }

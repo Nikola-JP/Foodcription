@@ -1,13 +1,19 @@
 package backend.controller;
 
+import backend.dto.KorisnikPretplataDTO;
+import backend.dto.KorisnikPretplataUpdateRequest;
 import backend.model.Korisnik;
 import backend.service.KorisnikService;
 import backend.security.JwtUtil; // you need to implement this or use existing JWT utility
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -89,5 +95,42 @@ public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
             return ResponseEntity.status(500).body("Greška pri promjeni lozinke.");
         }  
     }
+@PutMapping("/{email}/password/reset")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> resetPassword(@PathVariable String email, @RequestBody Map<String, String> body) {
+    String newPassword = body.get("newPassword");
+    korisnikService.resetUserPassword(email, newPassword);
+    return ResponseEntity.ok("Lozinka promijenjena.");
+}
+
+@PreAuthorize("hasRole('ADMIN')")
+@PutMapping("/{email}/role")
+public ResponseEntity<?> updateUserRole(@PathVariable String email, @RequestBody Map<String, String> request) {
+    String newRole = request.get("role");
+    try {
+        korisnikService.updateUserRole(email, newRole);
+        return ResponseEntity.ok("Uloga korisnika uspješno promijenjena.");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Greška: " + e.getMessage());
+    }
+}
+
+@GetMapping("/pretplate")
+    public ResponseEntity<List<KorisnikPretplataDTO>> getAllKorisniciPretplate() {
+        return ResponseEntity.ok(korisnikService.getAllKorisnikPretplate());
+    
+}
+
+@PostMapping("/pretplate/update")
+public ResponseEntity<String> updateKorisnikPretplata(@RequestBody KorisnikPretplataUpdateRequest request) {
+    korisnikService.updateKorisnikPretplata(
+        request.getEmail(),
+        request.getIme(),
+        request.getPrezime(),
+        request.getTipPretplate(),
+        request.getStatus()
+    );
+    return ResponseEntity.ok("Podaci uspješno ažurirani.");
+}
 
 }

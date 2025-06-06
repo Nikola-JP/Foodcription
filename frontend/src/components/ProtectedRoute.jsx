@@ -1,21 +1,33 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const ProtectedRoute = ({ children, onRequireLogin }) => {
+const ProtectedRoute = ({ children, onRequireLogin, requiredRoles = [] }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [authorized, setAuthorized] = useState(null);
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) {
-      sessionStorage.setItem("redirectAfterLogin", location.pathname);
-      navigate("/"); // Go to home
-      if (onRequireLogin) onRequireLogin();
-    }
-  }, [navigate, onRequireLogin, location]);
+    const userStr = localStorage.getItem("user");
 
-  const user = localStorage.getItem("user");
-  return user ? children : null;
+    if (!userStr) {
+      sessionStorage.setItem("redirectAfterLogin", location.pathname);
+      navigate("/"); // Redirect to home
+      if (onRequireLogin) onRequireLogin();
+      return;
+    }
+
+    const user = JSON.parse(userStr);
+
+    // If roles are specified, check if user.uloga is included
+    if (requiredRoles.length > 0 && !requiredRoles.includes(user.role)) {
+      navigate("/"); // Redirect if role not allowed
+      return;
+    }
+
+    setAuthorized(true);
+  }, [navigate, onRequireLogin, location, requiredRoles]);
+
+  return authorized ? children : null;
 };
 
 export default ProtectedRoute;

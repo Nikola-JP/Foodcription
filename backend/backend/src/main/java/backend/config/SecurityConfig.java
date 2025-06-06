@@ -3,9 +3,11 @@ package backend.config;
 import backend.security.JwtAuthenticationFilter;
 import backend.security.JwtUtil;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,20 +42,27 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/profile/**").hasAnyRole("ADMIN", "USER") // ✅ Moved here
-                .anyRequest().authenticated()
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .cors(Customizer.withDefaults())
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers("/error").permitAll()
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/profile/**").hasAnyRole("ADMIN", "USER")
+            .requestMatchers("/api/korisnici/**").hasAnyRole("ADMIN", "USER")
+            .anyRequest().authenticated()
+        )
+        .exceptionHandling(exception -> exception
+            .authenticationEntryPoint((request, response, authException) ->
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")
             )
-            .cors(Customizer.withDefaults())
-            .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        )
+        .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
-
-        return http.build();   
-    }
+    return http.build();
+}
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
