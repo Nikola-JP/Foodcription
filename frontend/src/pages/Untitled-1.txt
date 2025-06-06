@@ -1,0 +1,5 @@
+[
+  { "id": 2, "day": "Ponedjeljak", "name": "Štrukli sa sirom", "delivered": true, "slika": "/images/Štrukli sa sirom.jpg" },
+  { "id": 3, "day": "Utorak", "name": "Goulash", "delivered": false, "slika": "/images/Goulash.jpg" },
+  ...
+]

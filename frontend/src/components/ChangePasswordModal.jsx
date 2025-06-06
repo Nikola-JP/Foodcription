@@ -23,6 +23,8 @@ const ChangePasswordModal = ({ onClose }) => {
   const email = user.emailKorisnika || user.email; // ovisno kako si to postavio
   const token = user.token;
 
+  console.log("Šaljem zahtjev na:", `http://localhost:8080/api/auth/${email}/password`, token);
+
   try {
     const response = await fetch(`http://localhost:8080/api/auth/${email}/password`, {
       method: 'PUT',

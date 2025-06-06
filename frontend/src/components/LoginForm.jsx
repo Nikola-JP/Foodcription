@@ -97,4 +97,3 @@ const LoginForm = ({ onClose }) => {
 };
 
 export default LoginForm;
-                                                                                                                                                                                            

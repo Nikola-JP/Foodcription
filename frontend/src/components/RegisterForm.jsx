@@ -39,8 +39,13 @@ const RegisterForm = ({ onClose }) => {
       alert(`Dobrodošli, ${user.imeKorisnika}!`);
 
       localStorage.setItem("user", JSON.stringify({
-        ...user,
-        token
+        ime: user.imeKorisnika,
+        prezime: user.prezimeKorisnika,
+        email: user.emailKorisnika,
+        broj: user.mobKorisnika,
+        plan: user.pretplata ? user.pretplata.tipPretplate : "Basic",
+        token,
+        role: (user.role || "").toUpperCase() // uvijek velikim slovima!
       }));
 
       onClose();
@@ -91,7 +96,7 @@ const RegisterForm = ({ onClose }) => {
       />
       <input
         className="border p-2 w-full mb-2"
-        name="phone"
+        name="mobKorisnika"
         placeholder="+385000000000"
         onChange={handleChange}
       />

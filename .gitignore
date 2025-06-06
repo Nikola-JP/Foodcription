@@ -22,3 +22,35 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# === Gradle ===
+.gradle/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+*.log
+
+# === IntelliJ IDEA / VS Code project files ===
+*.iml
+.idea/
+.vscode/
+
+# === Java class & compilation output ===
+*.class
+*.jar
+*.war
+*.ear
+*.bin
+*.idx
+*.lock
+*.html
+*.xml
+*.db
+
+# === Misc ===
+*.probe
+*.tmp
+
+# === Test reports ===
+**/test-results/
+**/test-report/

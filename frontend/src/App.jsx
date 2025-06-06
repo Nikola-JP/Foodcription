@@ -62,7 +62,9 @@ function App() {
                 subtitle="Zdravi i ukusni obroci dostavljeni na tvoja vrata"
                 backgroundImage="/images/HeroImage.jpg"
                 primaryButton="Odaberi plan"
-                secondaryButton="Kontaktiraj nas"
+                secondaryButton="Pogledaj jelovnik"
+                user={user}
+                onRegister={() => openModal("register")}
               />
               <FeatureGrid />
               <InfoGrid />

@@ -4,9 +4,11 @@ import logo from '../assets/logo.png';
 function Navbar({ onSignIn, onRegister, user, onLogout }) {
   const navigate = useNavigate();
 
+  const ime = user?.ime || user?.imeKorisnika || "";
+
   return (
     <nav className="flex justify-between items-center p-4 bg-white shadow-md">
-      <Link to="/moj-dashboard">
+      <Link to="/">
         <img src={logo} alt="Foodcription Logo" className="h-16 w-auto" />
       </Link>
       <ul className="flex space-x-6 text-gray-700 font-medium items-center">
@@ -20,7 +22,7 @@ function Navbar({ onSignIn, onRegister, user, onLogout }) {
             Pretplata
           </Link>
         </li>
-        <li className="hover:text-green-500 cursor-pointer">Kontakt</li>
+        
 
         {!user ? (
           <>
@@ -48,7 +50,7 @@ function Navbar({ onSignIn, onRegister, user, onLogout }) {
               onClick={() => navigate("/moj-dashboard")}
               title="Moj profil"
             >
-              {user.imeKorisnika}
+              {ime}
             </li>
             <li>
               <button

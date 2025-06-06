@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -38,18 +37,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String role = jwtUtil.getRoleFromToken(token);
         System.out.println("Token validan, email: " + email + ", role: " + role);
 
-        List<SimpleGrantedAuthority> authorities = List.of(
-            new SimpleGrantedAuthority("ROLE_" + role)
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+            email, null, List.of(new SimpleGrantedAuthority("ROLE_" + role))
         );
-
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(email, null, authorities);
-
-        authentication.setDetails(
-                new WebAuthenticationDetailsSource().buildDetails(request)
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        System.out.println("Authorities: " + auth.getAuthorities());
+        System.out.println("Authentication: " + SecurityContextHolder.getContext().getAuthentication());
     } else {
         System.out.println("Token nije validan");
     }

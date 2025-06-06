@@ -1,4 +1,16 @@
-function HeroSection({ title, subtitle, backgroundImage, primaryButton, secondaryButton }) {
+import { useNavigate } from "react-router-dom";
+
+function HeroSection({ title, subtitle, backgroundImage, primaryButton, secondaryButton, user, onRegister }) {
+  const navigate = useNavigate();
+
+  const handlePrimaryClick = () => {
+    if (user) {
+      navigate("/uredi-profil");
+    } else if (onRegister) {
+      onRegister(); // Otvori modal za registraciju
+    }
+  };
+
   return (
     <section
       className="h-[500px] bg-cover bg-center flex flex-col justify-center items-center text-white text-center px-4"
@@ -12,12 +24,18 @@ function HeroSection({ title, subtitle, backgroundImage, primaryButton, secondar
       </p>
       <div className="flex space-x-4">
         {primaryButton && (
-          <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-full transition">
+          <button
+            className="bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-full transition"
+            onClick={handlePrimaryClick}
+          >
             {primaryButton}
           </button>
         )}
         {secondaryButton && (
-          <button className="bg-white hover:bg-gray-100 text-green-500 font-semibold py-3 px-6 rounded-full transition">
+          <button
+            className="bg-white hover:bg-gray-100 text-green-500 font-semibold py-3 px-6 rounded-full transition"
+            onClick={() => navigate("/menu")}
+          >
             {secondaryButton}
           </button>
         )}

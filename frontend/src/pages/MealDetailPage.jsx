@@ -32,7 +32,7 @@ const MealDetailPage = () => {
 
   const mealNameFromParams = searchParams.get("meal");
   const selectedDay = searchParams.get("day");
-  const fromDashboard = searchParams.get("from") === "dashboard";
+  const fromDashboard = searchParams.get("fromDashboard") === "true";
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
