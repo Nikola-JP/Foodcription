@@ -17,6 +17,7 @@ import EditMenuPage from "./pages/EditMenuPage";
 import UserDashboard from './pages/UserDashboard';
 import EditProfilePage from "./pages/EditProfilePage";
 import UserTable from "./pages/UserTable";
+import ContactPage from "./pages/ContactPage";
 
 function App() {
   const { isOpen, mode, openModal, closeModal } = useAuthModal();
@@ -81,6 +82,7 @@ function App() {
         <Route path="/uredi-profil" element={<ProtectedRoute requiredRoles={["admin", "user"]}onRequireLogin={() => openModal("login")}><EditProfilePage /></ProtectedRoute>} />
         <Route path="/moj-dashboard" element={<ProtectedRoute requiredRoles={["admin", "user"]} onRequireLogin={() => openModal("login")}><UserDashboard /></ProtectedRoute>}/>
         <Route path="/tablica" element={<ProtectedRoute requiredRoles={["admin"]} onRequireLogin={() => openModal("login")}><UserTable /></ProtectedRoute>}/>
+        <Route path="/kontakt" element={<ContactPage />} />
       </Routes>
     </Router>
   );

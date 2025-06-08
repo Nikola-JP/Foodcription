@@ -22,6 +22,11 @@ function Navbar({ onSignIn, onRegister, user, onLogout }) {
             Pretplata
           </Link>
         </li>
+        <li>
+          <Link to="/kontakt" className="hover:text-green-500 cursor-pointer">
+            Kontakt
+          </Link>
+        </li>
         
 
         {!user ? (
