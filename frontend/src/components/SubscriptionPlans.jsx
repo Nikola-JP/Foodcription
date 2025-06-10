@@ -5,11 +5,30 @@ import { useNavigate } from "react-router-dom";
 const SubscriptionPlans = ({ user, onRegister }) => {
   const navigate = useNavigate();
 
-  const handleChoose = () => {
-    if (user) {
-      navigate("/uredi-profil");
-    } else if (onRegister) {
-      onRegister(); // Otvori modal za registraciju
+  const handleChoose = async (plan) => {
+    console.log("Klik na plan:", plan, user);
+    if (!user) {
+      if (typeof onRegister === "function") {
+        onRegister();
+      }
+      return;
+    }
+    try {
+      const token = user.token;
+      const res = await fetch("http://localhost:8080/api/user/plan", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ plan }), // npr. "basic" ili "premium"
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const updatedUser = await res.json();
+      localStorage.setItem("user", JSON.stringify({ ...user, plan: updatedUser.plan }));
+      window.location.href = "/moj-dashboard";
+    } catch (err) {
+      alert("Greška prilikom promjene pretplate: " + err.message);
     }
   };
 
@@ -34,7 +53,7 @@ const SubscriptionPlans = ({ user, onRegister }) => {
           </ul>
           <button
             className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition w-full"
-            onClick={handleChoose}
+            onClick={() => handleChoose("basic")}
           >
             Odaberi Basic
           </button>
@@ -54,7 +73,7 @@ const SubscriptionPlans = ({ user, onRegister }) => {
           </ul>
           <button
             className="bg-white text-green-600 px-6 py-2 rounded hover:bg-gray-300 transition w-full"
-            onClick={handleChoose}
+            onClick={() => handleChoose("premium")}
           >
             Odaberi Premium
           </button>

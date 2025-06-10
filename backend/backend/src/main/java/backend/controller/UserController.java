@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
 
@@ -64,5 +65,18 @@ public class UserController {
         korisnik.setPretplata(novaPretplata);
         korisnikRepository.save(korisnik);
         return "OK";
+    }
+
+    @PatchMapping("/plan") // <-- makni /user
+    public ResponseEntity<?> updatePlan(@RequestBody Map<String, String> req, Principal principal) {
+        String email = principal.getName();
+        String plan = req.get("plan"); // "basic" ili "premium"
+        Korisnik korisnik = korisnikRepository.findByEmailKorisnika(email)
+                .orElseThrow(() -> new RuntimeException("Korisnik nije pronađen"));
+        Pretplata pretplata = pretplataRepository.findByTipPretplate(plan)
+                .orElseThrow(() -> new RuntimeException("Pretplata nije pronađena"));
+        korisnik.setPretplata(pretplata);
+        korisnikRepository.save(korisnik);
+        return ResponseEntity.ok(Map.of("plan", plan));
     }
 }

@@ -18,8 +18,29 @@ const EditProfilePage = () => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")));
-  }, [location]);
+    const fetchUserProfile = async () => {
+      const userString = localStorage.getItem("user");
+      if (!userString) return;
+      const userObj = JSON.parse(userString);
+      const token = userObj.token;
+      const email = userObj.email || userObj.emailKorisnika;
+      try {
+        const res = await fetch(`http://localhost:8080/api/profile/${encodeURIComponent(email)}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUser({ ...userObj, ...data });
+          localStorage.setItem("user", JSON.stringify({ ...userObj, ...data }));
+        }
+      } catch (err) {
+        // Optionally handle error
+      }
+    };
+    fetchUserProfile();
+  }, []);
 
   useEffect(() => {
     if (successMessage) {

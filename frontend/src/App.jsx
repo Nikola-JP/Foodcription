@@ -74,7 +74,15 @@ function App() {
             </>
           }
         />
-        <Route path="/pretplata" element={<SubscriptionPage />} />
+        <Route
+          path="/pretplata"
+          element={
+            <SubscriptionPage
+              user={user}
+              onRegister={() => openModal("register")}
+            />
+          }
+        />
         <Route path="/menu" element={<ProtectedRoute requiredRoles={["admin", "user"]} onRequireLogin={() => openModal("login")}><MenuPage /></ProtectedRoute>} />
         <Route path="/meal/:id" element={<ProtectedRoute requiredRoles={["admin", "user"]} onRequireLogin={() => openModal("login")}><MealDetailPage /></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute requiredRoles={["admin", "user"]} onRequireLogin={() => openModal("login")}><Dashboard /></ProtectedRoute>} />

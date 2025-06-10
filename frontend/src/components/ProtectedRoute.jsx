@@ -18,10 +18,10 @@ const ProtectedRoute = ({ children, onRequireLogin, requiredRoles = [] }) => {
 
     const user = JSON.parse(userStr);
 
-    // If roles are specified, check if user.uloga is included
-    if (requiredRoles.length > 0 && !requiredRoles.includes(user.role)) {
+    const userRole = (user.role || user.uloga || "").toLowerCase();
+    if (requiredRoles.length > 0 && !requiredRoles.map(r => r.toLowerCase()).includes(userRole)) {
       navigate("/"); // Redirect if role not allowed
-      return;
+      return null;
     }
 
     setAuthorized(true);

@@ -8,7 +8,7 @@ const RegisterForm = ({ onClose }) => {
     prezimeKorisnika: '',
     emailKorisnika: '',
     lozinkaKorisnika: '',
-    mobKorisnika: ''
+    phone: '' // <-- promijeni ovdje
   });
 
   const handleChange = e => {
@@ -96,9 +96,12 @@ const RegisterForm = ({ onClose }) => {
       />
       <input
         className="border p-2 w-full mb-2"
-        name="mobKorisnika"
-        placeholder="+385000000000"
+        name="phone"
+        placeholder="+385 99 123 4567"
         onChange={handleChange}
+        required
+        pattern="^\+385\s\d{2}\s\d{3}\s\d{4}$"
+        title="Format: +385 99 123 4567"
       />
       <button className="bg-green-600 text-white px-4 py-2 w-full rounded hover:bg-green-700 transition">Register</button>
     </form>

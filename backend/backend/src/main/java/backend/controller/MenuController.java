@@ -51,4 +51,26 @@ public class MenuController {
         Korisnik korisnik = korisnikRepo.findByEmailKorisnika(principal.getName()).orElseThrow();
         return jelovnikRepo.findByKorisnikId(korisnik.getIdKorisnika());
     }
+
+    @PatchMapping("/{dan}")
+    @Transactional
+    public ResponseEntity<?> updateMealForDay(@PathVariable String dan, @RequestBody MenuDayDTO menuDay, Principal principal) {
+        Korisnik korisnik = korisnikRepo.findByEmailKorisnika(principal.getName()).orElseThrow();
+        // Pronađi zapis za taj dan, ili kreiraj novi ako ne postoji
+        KorisnikJelovnik kj = jelovnikRepo.findByKorisnikIdAndDan(korisnik.getIdKorisnika(), dan)
+            .orElse(new KorisnikJelovnik());
+        kj.setKorisnikId(korisnik.getIdKorisnika());
+        kj.setDan(dan);
+        kj.setJeloId(menuDay.mealId);
+        jelovnikRepo.save(kj);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{dan}")
+    @Transactional
+    public ResponseEntity<?> deleteMealForDay(@PathVariable String dan, Principal principal) {
+        Korisnik korisnik = korisnikRepo.findByEmailKorisnika(principal.getName()).orElseThrow();
+        jelovnikRepo.deleteByKorisnikIdAndDan(korisnik.getIdKorisnika(), dan);
+        return ResponseEntity.ok().build();
+    }
 }
