@@ -1,7 +1,7 @@
 # 🍽️ Foodcription
 
-**Foodcription** je web aplikacija za **pretplatu na zdrave obroke**!  
-Korisnici mogu pregledavati gotove jelovnike i pretplatiti se na svakodnevne isporuke nutritivno bogatih, ukusnih jela, spremnih za užurbani način života.
+**Foodcription** is a web application for **healthy meal subscriptions**!  
+Users can browse curated menus and subscribe to daily deliveries of nutritious, delicious meals designed for busy lifestyles.
 
 ---
 
@@ -9,32 +9,32 @@ Korisnici mogu pregledavati gotove jelovnike i pretplatiti se na svakodnevne isp
 
 - **Frontend**:
   - ⚛️ React (Vite setup)
-  - 🎨 TailwindCSS za brzo i responzivno stiliziranje
-- **Backend** (uskoro):
+  - 🎨 Tailwind CSS for fast, responsive styling
+- **Backend** (coming soon):
   - ☕ Spring Boot (Java 21)
-- **Baza podataka**:
+- **Database**:
   - 🛢️ MariaDB
-- **Autentikacija**:
-  - ✉️ Vlastiti login sustav (Spring Security) + mogućnost Google prijave
-- **Deployment**:
-  - GitHub (za verzioniranje)
+- **Authentication**:
+  - ✉️ Custom login system (Spring Security) with Google sign-in support
+- **Version Control**:
+  - GitHub
 
 ---
 
-## 📋 Trenutno implementirano
+## 📋 Currently Implemented
 
-- ✅ Dizajniran landing page s hero sekcijom, karticama i promotivnim bannerom
-- ✅ Responzivan dizajn prilagođen mobilnim uređajima
-- ✅ Pripremljena struktura za login / signup funkcionalnosti
+- ✅ Landing page featuring a hero section, cards and a promotional banner
+- ✅ Responsive, mobile-friendly design
+- ✅ Initial structure for login and signup functionality
 
 ---
 
-## 🔥 Što dolazi uskoro
+## 🔥 Coming Soon
 
-- 🔐 Puna korisnička autentikacija (email + Google OAuth login)
-- 📦 Backend API za upravljanje korisnicima, narudžbama i pretplatama
-- 📈 Admin dashboard za upravljanje jelima i cijenama
-- 🛠️ Automatizacija deploya na server
+- 🔐 Full user authentication (email and Google OAuth login)
+- 📦 Backend API for managing users, orders and subscriptions
+- 📈 Admin dashboard for managing meals and pricing
+- 🛠️ Automated server deployment
 
 ---
 
