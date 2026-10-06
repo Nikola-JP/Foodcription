@@ -1,103 +1,73 @@
-# 🧩 Backend integracija za prikaz pojedinačnih jela (MealDetailPage)
-
-## ✅ Cilj:
-Omogućiti da frontend aplikacija dinamički prikazuje podatke za svako jelo kad korisnik klikne na njega na `/menu` stranici.
-
----
-
-## 🧠 Što treba napraviti:
-
+# 🧩 Backend Integration for Displaying Individual Meals (MealDetailPage)
+## ✅ Goal:
+Enable the frontend application to dynamically display data for each meal when the user clicks on it on the `/menu` page.
+## 🧠 What Needs to Be Done:
 ### 1. Endpoint: GET `/api/jela/{id}`
-
-Napraviti REST endpoint u Spring Boot aplikaciji koji vraća podatke o jednom jelu na temelju ID-a.
-
+Create a REST endpoint in the Spring Boot application that returns data for a single meal based on its ID.
 ```java
 @GetMapping("/api/jela/{id}")
 public ResponseEntity<MealDTO> getMealById(@PathVariable Long id) {
-    MealDTO meal = mealService.findById(id); // koristi servis
+    MealDTO meal = mealService.findById(id); // use the service
     return ResponseEntity.ok(meal);
 }
 ```
-
----
-
-### 2. DTO struktura (MealDTO):
-
+### 2. DTO Structure (MealDTO):
 ```java
 public class MealDTO {
     private Long id;
     private String naziv;
     private String opis;
-    private String slika; // relativna putanja npr. /images/shtrukli.jpg
+    private String slika; // relative path, e.g. /images/shtrukli.jpg
     private String kategorija;
     private NutritivneVrijednosti nutrijenti;
     private List<RecenzijaDTO> recenzije;
-    // + getteri i setteri
+    // + getters and setters
 }
-
 public class NutritivneVrijednosti {
     private int proteini;
     private int ugljikohidrati;
     private int masti;
-    // + getteri i setteri
+    // + getters and setters
 }
-
 public class RecenzijaDTO {
     private String autor;
     private String grad;
     private String tekst;
-    // + getteri i setteri
+    // + getters and setters
 }
 ```
-
----
-
-### 3. Frontend poziv (već pripremljen):
-
-Frontend koristi `fetch` poziv na temelju `id` iz URL-a:
-
+### 3. Frontend Request (Already Prepared):
+The frontend uses a `fetch` request based on the `id` from the URL:
 ```js
 useEffect(() => {
   fetch(`http://localhost:8080/api/jela/${id}`)
     .then(res => res.json())
     .then(data => setMeal(data))
-    .catch(err => console.error("Greška pri dohvaćanju jela:", err));
+    .catch(err => console.error("Error fetching the meal:", err));
 }, [id]);
 ```
-
----
-
-### 4. Napomena:
-
-- Ako slike nisu na API-u, neka `slika` bude relativna putanja (`/images/ime.jpg`) – frontend ih učitava iz `public/images`.
-- Recenzije mogu biti hardkodirane dok se ne izgradi sustav za korisnike i komentare.
-- Ako koristiš JPA entitete, možeš napraviti mapiranje iz `MealEntity` u `MealDTO` ručno ili pomoću MapStruct.
-
----
-
-### ✅ Primjer poziva:
-
+### 4. Notes:
+- If images are not served by the API, set `slika` to a relative path (`/images/name.jpg`) – the frontend loads them from `public/images`.
+- Reviews can be hardcoded until the user and comment system is built.
+- If you use JPA entities, you can map `MealEntity` to `MealDTO` manually or using MapStruct.
+### ✅ Example Request:
 `GET /api/jela/2`
-
-Odgovor:
+Response:
 ```json
 {
   "id": 2,
-  "naziv": "Štrukli sa sirom",
-  "opis": "Domaći štrukli pečeni u vrhnju...",
+  "naziv": "Cheese Štrukli",
+  "opis": "Homemade štrukli baked in cream...",
   "slika": "/images/shtrukli.jpg",
-  "kategorija": "Tradicionalno",
+  "kategorija": "Traditional",
   "nutrijenti": {
     "proteini": 14,
     "ugljikohidrati": 42,
     "masti": 18
   },
   "recenzije": [
-    { "autor": "Ana", "grad": "Zagreb", "tekst": "Savršeno za zimu!" }
+    { "autor": "Ana", "grad": "Zagreb", "tekst": "Perfect for winter!" }
   ]
 }
 ```
-
----
-
-Ako backend endpoint bude vraćao podatke u ovom formatu, frontend će automatski prikazivati točno jelo koje je kliknuto.
+If the backend endpoint returns data in this format, the frontend will automatically display the exact meal that was clicked.
