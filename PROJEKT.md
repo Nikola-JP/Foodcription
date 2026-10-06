@@ -1,28 +1,24 @@
-🥗 Foodcription – Frontend Overview
+# 🥗 Foodcription – Frontend Overview
 
-Ovaj dokument opisuje frontend strukturu projekta Foodcription, koji koristi React + Vite + TailwindCSS. Trenutno se radi samo frontend – backend će biti spojen kasnije putem Spring Boot REST API-ja.
+This document describes the frontend structure of Foodcription, which uses React + Vite + Tailwind CSS. Currently, only the frontend is being developed—the backend will be connected later through a Spring Boot REST API.
 
-✅ Tehnologije
+## ✅ Technologies
 
-React
+- React
+- Vite
+- Tailwind CSS
+- React Router DOM (for routing)
+- @react-oauth/google (Google login)
+- The backend is planned to use Spring Boot + MariaDB (not connected yet)
 
-Vite
+## 📁 Project Structure
 
-Tailwind CSS
-
-React Router DOM (za routing)
-
-@react-oauth/google (Google login)
-
-Backend je planiran u Spring Boot + MariaDB (nije još spojen)
-
-📁 Struktura projekta
-
+```text
 frontend/
 ├── public/
-│   └── images/              # slike jela za menu page i meal detail
+│   └── images/              # meal images for the menu and meal detail pages
 ├── src/
-│   ├── assets/              # logotipi i ilustracije
+│   ├── assets/              # logos and illustrations
 │   ├── components/
 │   │   ├── Navbar.jsx
 │   │   ├── Footer.jsx
@@ -48,63 +44,59 @@ frontend/
 ├── vite.config.js
 ├── INSTALLGUIDE.md
 └── README.md
+```
 
-🧭 Rute (App.jsx)
+## 🧭 Routes (App.jsx)
 
+```jsx
 <Route path="/" element={<LandingPage />} />
 <Route path="/pretplata" element={<SubscriptionPage />} />
 <Route path="/menu" element={<MenuPage />} />
 <Route path="/meal/:id" element={<MealDetailPage />} />
+```
 
-🔐 Google Login
+## 🔐 Google Login
 
-Implementiran putem @react-oauth/google
+- Implemented using `@react-oauth/google`.
+- The `LoginForm.jsx` component contains `<GoogleLogin />`.
+- The token is currently only logged using `console.log()`, but `credentialResponse` is available to send to the backend.
 
-Komponenta LoginForm.jsx sadrži <GoogleLogin />
-
-Token se za sada samo console.log(), ali postoji credentialResponse za backend slanje
-
+```jsx
 <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
+```
 
-🥘 Menu Page
+## 🥘 Menu Page
 
-Prikazuje galeriju jela
+- Displays a gallery of meals.
+- Images are located in `public/images`.
+- Hover effects include scaling, rotation, and shadows.
+- Each link leads to `/meal/:id`.
 
-Slike se nalaze u public/images
+## 🍽️ Meal Detail Page
 
-Hover efekti: scale, rotacija, sjena
+Dynamic route: `/meal/:id`
 
-Link vodi na /meal/:id
+Displays:
 
-🍽️ Meal Detail Page
+- A meal image and description
+- Nutritional information (protein, fat, carbohydrates)
+- Reviews
+- A newsletter signup form
 
-Dinamična ruta: /meal/:id
+### 📌 Backend Fetch (Currently Commented Out)
 
-Prikazuje:
-
-Slika i opis jela
-
-Nutritivne vrijednosti (proteini, masti, ugljikohidrati)
-
-Recenzije
-
-Newsletter forma
-
-📌 Backend Fetch (trenutno zakomentiran):
-
+```jsx
 // useEffect(() => {
 //   fetch(`http://localhost:8080/api/jela/${id}`)
 //     .then(res => res.json())
 //     .then(data => setMeal(data))
 // }, [id]);
+```
 
-🧠 Backend Integracija (TODO)
+## 🧠 Backend Integration (TODO)
 
+✅ All components and hooks are ready.
 
+If you want to see the complete contents of all `.jsx` files exactly as they currently appear in the code, ask: “Give me the code for all components.” They have already been defined in this session and can be exported together.
 
-✅ Sve komponente i hookovi su pripremljeni.
-
-Ako želiš vidjeti sve .jsx sadržaje točno kakvi su sada u kodu, zatraži: daj sve kodove komponenti. Oni su već definirani u ovoj sesiji i mogu se grupno izvesti.
-
-Za daljnji razvoj: spoji se na backend i odkmentiraj fetch() dijelove.
-
+For further development: connect to the backend and uncomment the `fetch()` sections.
